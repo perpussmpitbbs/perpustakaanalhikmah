@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="img/logo.png">
+<title>Perpustakaan SMP IT BBS</title>
+<meta name="description" content="Website resmi Perpustakaan SMP IT BBS: layanan, koleksi digital, dan katalog buku.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FFFCF3;--leaf:#2F8F3E;--deep:#1B5E2E;--tomato:#E8412A;--wood:#8F4B2A;--sun:#F7C93E;--ink:#2A2A22;--mint:#E3F3DC;--peach:#FFE3D6;--butter:#FFF1BF;--tan:#F2DFCB}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font-family:Nunito,"Segoe UI",Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.65;font-size:17px}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:Fredoka,"Arial Rounded MT Bold","Trebuchet MS",sans-serif;font-weight:600;line-height:1.15;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:clamp(1.9rem,4.5vw,2.8rem);color:var(--tomato);text-shadow:2px 2px 0 #B5D69E;margin-bottom:.5rem}
+a:focus-visible,button:focus-visible{outline:3px solid var(--tomato);outline-offset:3px}
+.wrap{max-width:1080px;margin:auto;padding:0 20px}
+section{padding:72px 0;position:relative}
+.lead{max-width:56ch;color:#4b4b3f;margin-bottom:28px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(255,252,243,.94);backdrop-filter:blur(6px);border-bottom:3px solid var(--leaf)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:Fredoka,sans-serif;font-weight:600;color:var(--deep);font-size:1.05rem;line-height:1.1}
+.brand img{width:42px;height:42px;object-fit:contain}
+nav{display:flex;align-items:center;gap:6px}
+nav a{text-decoration:none;font-weight:800;padding:6px 12px;border-radius:99px;font-size:.95rem}
+nav a:hover{background:var(--mint)}
+nav a.pill{background:var(--tomato);color:#fff}
+nav a.pill:hover{background:var(--deep)}
+#menu{display:none;background:var(--sun);border:2px solid var(--ink);border-radius:12px;padding:6px 12px;font:800 .95rem Nunito,sans-serif;cursor:pointer}
+
+/* hero */
+#beranda{padding:56px 0 88px;background:linear-gradient(180deg,var(--mint),var(--paper))}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+.kicker{font-weight:800;color:var(--deep);margin-bottom:6px}
+h1{font-size:clamp(3.6rem,10vw,6.4rem);color:var(--tomato);text-shadow:5px 5px 0 #7DA24A;letter-spacing:.5px;margin-bottom:12px}
+.quote{font-size:1.25rem;font-weight:600;max-width:30ch;margin-bottom:26px;border-left:5px solid var(--sun);padding-left:14px}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;text-decoration:none;font-weight:800;padding:12px 24px;border-radius:99px;border:3px solid var(--ink);background:var(--sun);box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.green{background:var(--leaf);color:#fff}
+.photo{position:relative;transform:rotate(2deg)}
+.photo::before{content:"";position:absolute;inset:18px -16px -16px 18px;background:var(--sun);border-radius:38% 62% 55% 45%/50% 40% 60% 50%;z-index:0}
+.photo img{position:relative;z-index:1;border:7px solid #fff;border-radius:28px 70px 28px 70px;box-shadow:0 10px 24px rgba(0,0,0,.18);aspect-ratio:4/3;object-fit:cover;width:100%}
+.leaf{position:absolute;pointer-events:none;color:var(--leaf);opacity:.9}
+.leaf.a{width:150px;left:-40px;top:20px;transform:rotate(-20deg)}
+.leaf.b{width:110px;right:-26px;bottom:-30px;transform:rotate(150deg);color:#5DB06A}
+
+/* tentang */
+.about{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:start}
+.facts{display:grid;gap:12px}
+.fact{background:var(--butter);border-radius:22px 8px 22px 8px;padding:16px 20px;font-weight:600}
+.fact b{display:block;font-family:Fredoka,sans-serif;font-weight:600;font-size:1.25rem;color:var(--wood)}
+.fact:nth-child(2){background:var(--peach);margin-left:22px}
+.fact:nth-child(3){background:var(--mint)}
+
+/* layanan */
+#layanan{background:var(--tan)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.svc{padding:20px 18px;border-radius:26px 10px 26px 10px;background:var(--mint)}
+.svc:nth-child(4n+2){background:var(--butter);border-radius:10px 26px 10px 26px}
+.svc:nth-child(4n+3){background:var(--peach)}
+.svc:nth-child(4n+4){background:#fff;border-radius:10px 26px 10px 26px}
+.svc:nth-child(odd){transform:rotate(-1deg)}
+.svc:nth-child(even){transform:rotate(1deg)}
+.svc span{font-size:1.9rem;display:block;margin-bottom:4px}
+.svc h3{font-size:1.15rem;color:var(--deep);margin-bottom:4px}
+.svc p{font-size:.93rem;line-height:1.5}
+
+/* organisasi */
+.people{display:flex;flex-wrap:wrap;gap:30px 40px;margin-top:20px}
+.person{text-align:center;width:200px}
+.person img{width:170px;height:170px;object-fit:cover;object-position:top;margin:0 auto 12px;border:5px solid #fff;box-shadow:0 0 0 4px var(--leaf);border-radius:58% 42% 52% 48%/48% 56% 44% 52%;background:var(--mint)}
+.person:nth-child(2) img{box-shadow:0 0 0 4px var(--tomato)}
+.person:nth-child(3) img{box-shadow:0 0 0 4px var(--sun)}
+.person b{display:block;line-height:1.3}
+.person small{display:inline-block;margin-top:6px;background:var(--mint);padding:2px 12px;border-radius:99px;font-weight:800;color:var(--deep)}
+.person:nth-child(2) small{background:var(--peach);color:#a52b17}
+.person:nth-child(3) small{background:var(--butter);color:var(--wood)}
+
+/* kanal */
+#kanal{background:var(--deep);color:#fff}
+#kanal h2{text-shadow:3px 3px 0 #0f3d1c;color:var(--sun)}
+#kanal .lead{color:#d9efd9}
+.ch{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.ch a{display:block;text-decoration:none;color:var(--ink);background:var(--paper);padding:24px 26px;border-radius:30px 12px 30px 12px;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--sun);transition:transform .15s}
+.ch a:hover{transform:translateY(-4px)}
+.ch a:nth-child(2){box-shadow:6px 6px 0 var(--tomato);border-radius:12px 30px 12px 30px}
+.ch a:nth-child(3){box-shadow:6px 6px 0 #7DC48A;border-radius:12px 30px 12px 30px}
+.ch a:nth-child(4){box-shadow:6px 6px 0 var(--wood)}
+.ch small{font-weight:800;color:var(--leaf)}
+.ch h3{font-size:1.5rem;color:var(--tomato);margin:2px 0 6px}
+.ch p{font-size:.97rem;margin-bottom:10px}
+.ch em{font-style:normal;font-weight:800;border-bottom:3px solid var(--sun)}
+
+/* kontak */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+.card{background:#fff;border:3px solid var(--ink);border-radius:26px 10px 26px 10px;padding:24px}
+.card dt{font-weight:800;color:var(--deep);margin-top:12px}
+.card dt:first-child{margin-top:0}
+.card dd{margin:0}
+.note{background:var(--butter);border-radius:10px 26px 10px 26px;padding:24px}
+.note h3{font-size:1.5rem;color:var(--wood);margin-bottom:8px}
+.note .btn{margin-top:14px}
+
+footer{background:var(--ink);color:#e8e6da;padding:34px 0;font-size:.93rem}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center}
+.foot a{color:var(--sun)}
+
+@media (max-width:860px){
+ .hero,.about,.contact,.ch{grid-template-columns:1fr}
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .photo{max-width:520px}
+ #menu{display:block}
+ nav{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--paper);padding:12px 20px 18px;border-bottom:3px solid var(--leaf)}
+ nav.open{display:flex}
+ nav a{padding:10px 14px}
+ section{padding:56px 0}
+}
+@media (max-width:480px){.grid{grid-template-columns:1fr}.brand span{font-size:.9rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* tambahan: tipografi rapi */
+body{font-size:17px;letter-spacing:.005em}
+p{text-wrap:pretty}
+h1{font-weight:700;line-height:1;text-shadow:4px 4px 0 #7DA24A}
+h3{letter-spacing:0}
+.kicker{font-size:1rem}
+/* tambahan: bagian baru */
+#cara{background:var(--paper)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step{background:#fff;border:3px solid var(--ink);border-radius:26px 10px 26px 10px;padding:26px 22px 22px;position:relative}
+.step:nth-child(2){border-radius:10px 26px 10px 26px}
+.step i{position:absolute;top:-20px;left:20px;width:42px;height:42px;border-radius:50%;background:var(--tomato);color:#fff;font:700 1.2rem Fredoka,sans-serif;display:grid;place-items:center;border:3px solid var(--ink);font-style:normal}
+.step h3{font-size:1.25rem;color:var(--deep);margin:6px 0 4px}
+#rak{background:var(--mint)}
+.rak{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:end}
+.shelf{display:flex;align-items:flex-end;gap:12px;padding:0 28px;border-bottom:18px solid var(--wood);border-radius:4px;min-height:240px}
+.bk{display:flex;align-items:center;justify-content:center;width:78px;text-decoration:none;color:#fff;border-radius:8px 8px 2px 2px;border:3px solid var(--ink);border-bottom:0;transition:translate .25s,rotate .25s}
+.bk span{writing-mode:vertical-rl;font:600 1.05rem Fredoka,sans-serif;padding:16px 0}
+.bk.b1{height:210px;background:var(--tomato)}
+.bk.b2{height:180px;background:var(--leaf)}
+.bk.b3{height:230px;background:var(--wood)}
+.bk:hover,.bk:focus-visible{translate:0 -16px;rotate:-3deg}
+#faq{background:var(--butter)}
+.faq{display:grid;gap:12px;max-width:720px}
+.faq details{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:0 20px}
+.faq summary{cursor:pointer;font:600 1.1rem Fredoka,sans-serif;padding:15px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--tomato);font-size:1.5rem;line-height:1;transition:rotate .25s}
+.faq details[open] summary::after{rotate:45deg}
+.faq details p{padding-bottom:16px;animation:rise .35s both}
+.card a{color:var(--tomato);font-weight:800}
+/* tambahan: animasi */
+@keyframes sway{0%,100%{rotate:-4deg}50%{rotate:5deg}}
+@keyframes rise{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
+@keyframes pop{from{opacity:0;scale:.85}to{opacity:1;scale:1}}
+@keyframes run{to{transform:translateX(-50%)}}
+.leaf{animation:sway 6s ease-in-out infinite;transform-origin:50% 90%}
+.leaf.b{animation-delay:-3s}
+.hero>div:first-child>*{animation:rise .7s both}
+.hero>div:first-child>:nth-child(2){animation-delay:.12s}
+.hero>div:first-child>:nth-child(3){animation-delay:.26s}
+.hero>div:first-child>:nth-child(4){animation-delay:.4s}
+.photo{animation:pop .9s .3s both cubic-bezier(.2,.9,.3,1.2)}
+.strip{background:var(--tomato);color:#fff;overflow:hidden;border-block:3px solid var(--ink);transform:rotate(-1deg);margin:-30px -10px 0;position:relative;z-index:2}
+.strip>div{display:flex;width:max-content;animation:run 30s linear infinite;padding:10px 0;font:600 1.3rem Fredoka,sans-serif}
+.strip span{padding:0 16px}
+.js .rv{opacity:0;translate:0 28px;transition:opacity .7s ease,translate .7s ease,transform .25s ease}
+.js .rv.in{opacity:1;translate:0 0}
+.svc:hover{transform:rotate(0) scale(1.05)}
+#pb{position:fixed;top:0;left:0;right:0;height:5px;background:var(--sun);transform:scaleX(0);transform-origin:0 50%;z-index:40}
+#top{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;background:var(--tomato);color:#fff;border:3px solid var(--ink);text-decoration:none;font:700 1.3rem/40px Fredoka,sans-serif;text-align:center;z-index:30;opacity:0;translate:0 20px;pointer-events:none;transition:opacity .3s,translate .3s}
+#top.show{opacity:1;translate:0 0;pointer-events:auto}
+@media (max-width:860px){.steps,.rak{grid-template-columns:1fr}.steps{gap:34px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.js .rv{opacity:1;translate:none}}
+main{overflow-x:clip}
+/* tenang: kurangi gerakan */
+.fall{opacity:.3}.mq{animation-duration:80s}.strip>div{animation-duration:50s}.photo::before{animation-duration:14s}
+#theme{width:40px;height:40px;border-radius:50%;border:2px solid #2A2A22;background:var(--sun);cursor:pointer;font-size:1.1rem;flex:none}
+/* klik berhamburan dibuat lewat JS */
+/* mode gelap */
+:root[data-theme=dark]{--paper:#141C17;--ink:#EFEBDD;--mint:#1D3024;--peach:#33261F;--butter:#352F1C;--tan:#2B2820;--deep:#8ED99A}
+[data-theme=dark] header{background:rgba(20,28,23,.94)}
+[data-theme=dark] .lead{color:#C9C6B6}
+[data-theme=dark] h2{text-shadow:2px 2px 0 #0B2615}
+[data-theme=dark] .step,[data-theme=dark] .card,[data-theme=dark] .faq details,[data-theme=dark] .bcard,[data-theme=dark] .ch a,[data-theme=dark] .svc:nth-child(4n+4){background:#1F2D25}
+[data-theme=dark] .btn{color:#2A2A22;border-color:#000;box-shadow:4px 4px 0 #000}
+[data-theme=dark] .btn.green,[data-theme=dark] .btn.red{color:#fff}
+[data-theme=dark] footer{background:#0C120E}
+[data-theme=dark] #kanal{background:#0F3D1C}
+[data-theme=dark] nav a.pill:hover{background:#B52E1A}
+[data-theme=dark] .fact b,[data-theme=dark] .note h3{color:#E2A173}
+[data-theme=dark] .person:nth-child(n) small{color:#EFEBDD;background:#27402F}
+[data-theme=dark] .quiz .opt{background:#1F2D25}
+
+/* wow */
+#beranda{overflow:hidden}
+.hero{position:relative;z-index:1}
+.fall{position:absolute;top:-60px;left:var(--x);width:var(--s);color:#5DB06A;opacity:.5;animation:fall var(--d) linear infinite;animation-delay:var(--l);pointer-events:none}
+@keyframes fall{to{translate:70px 110vh;rotate:360deg}}
+@keyframes blink{50%{opacity:0}}
+@keyframes hop{from{opacity:0;translate:0 46px;rotate:-14deg}60%{translate:0 -10px}}
+@keyframes blob{50%{border-radius:60% 40% 40% 60%/40% 60% 50% 50%}}
+@keyframes pulse{from{box-shadow:0 0 0 0 rgba(232,65,42,.55)}to{box-shadow:0 0 0 14px rgba(232,65,42,0)}}
+.hero>div:first-child>h1{animation:none}
+.hero>div:first-child>:nth-child(5){animation-delay:.55s}
+.ch1{display:inline-block;white-space:pre;animation:hop .7s backwards;transition:translate .2s,rotate .2s}
+.ch1:hover{translate:0 -10px;rotate:-6deg}
+.type{margin-top:22px;font-weight:800;color:var(--deep);min-height:1.7em}
+.type b{color:var(--tomato)}
+.type b::after{content:"|";margin-left:2px;animation:blink 1s steps(2) infinite}
+.photo::before{animation:blob 8s ease-in-out infinite}
+.photo img{transition:transform .15s ease-out}
+nav a.pill{animation:pulse 2.4s infinite}
+#intip{background:var(--peach);overflow:hidden}
+.mqs{display:grid;gap:22px;margin:24px -20px 0;transform:rotate(-1.5deg)}
+.mq{display:flex;width:max-content;animation:run 45s linear infinite}
+.mq.rev{animation-direction:reverse}
+.mq:hover{animation-play-state:paused}
+.mq img{height:230px;width:auto;margin-right:20px;border-radius:6px 14px 6px 14px;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);background:#fff;transition:transform .25s}
+.mq img:hover{transform:translateY(-10px) rotate(-2deg) scale(1.06)}
+
+/* playful: stiker */
+@keyframes bob{50%{translate:0 -6px}}
+.stk{position:absolute;z-index:3;background:var(--sun);color:#2A2A22;border:3px solid #2A2A22;border-radius:99px;padding:5px 14px;font:700 .95rem Fredoka,sans-serif;box-shadow:3px 3px 0 #2A2A22;animation:bob 6s ease-in-out infinite}
+.stk.s1{left:-14px;bottom:26px;rotate:-6deg}
+.stk.s2{right:-8px;top:-14px;rotate:5deg;background:var(--tomato);color:#fff;animation-delay:-3s}
+/* kuis */
+#kuis{background:var(--butter)}
+.quiz{max-width:720px}
+.qbar{height:8px;background:var(--mint);border-radius:9px;overflow:hidden;margin-bottom:14px}
+.qbar i{display:block;height:100%;background:var(--tomato);transition:width .4s}
+.quiz h3{font-size:1.4rem;color:var(--deep)}
+.quiz .opt{display:block;width:100%;text-align:left;margin-top:10px;font:700 1rem Nunito,sans-serif;padding:12px 16px;border:3px solid var(--ink);border-radius:16px;background:var(--paper);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s}
+.quiz .opt:hover{background:var(--sun);color:#2A2A22;transform:translateX(6px)}
+.qres{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0}
+.qres figure{width:130px;margin:0;text-align:center;font-weight:800;font-size:.85rem;line-height:1.3}
+.qres img{width:100%;aspect-ratio:2/3;object-fit:cover;border:3px solid var(--ink);border-radius:6px 14px 6px 14px;margin-bottom:6px}
+.quiz .btn{margin:6px 10px 0 0}
+/* galeri */
+.gal{display:flex;flex-wrap:wrap;gap:28px;justify-content:center}
+.pol{background:#fff;padding:12px 12px 8px;border:3px solid #2A2A22;box-shadow:5px 5px 0 var(--sun);width:min(280px,100%);margin:0;transform:rotate(-2deg);transition:transform .25s}
+.pol:nth-child(even){transform:rotate(2deg);box-shadow:5px 5px 0 var(--leaf)}
+.pol:hover{transform:rotate(0) scale(1.04)}
+.pol img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.pol figcaption{font:600 1rem Fredoka,sans-serif;text-align:center;padding-top:8px;color:#2A2A22}
+
+/* ceria tapi tenang */
+.fall{opacity:.35}
+.mq{animation-duration:70s}
+nav a.pill{animation-duration:3.6s}
+.stk{position:absolute;z-index:3;display:grid;place-items:center;text-align:center;font:700 1rem/1.15 Fredoka,sans-serif;color:#2A2A22;border:3px solid #2A2A22;box-shadow:3px 3px 0 #2A2A22}
+.s1{top:-16px;left:-14px;width:84px;height:84px;border-radius:50%;background:var(--sun);rotate:-12deg;animation:wob 6s ease-in-out infinite}
+.s2{bottom:-14px;right:14px;padding:8px 14px;border-radius:12px;background:#9ED8A6;rotate:4deg}
+@keyframes wob{50%{rotate:-5deg}}
+#kuis{background:var(--butter)}
+.quiz{background:#fff;border:3px solid var(--ink);border-radius:26px 10px 26px 10px;padding:26px;max-width:720px;box-shadow:6px 6px 0 var(--tomato)}
+.quiz h3{font-size:1.4rem;color:var(--deep);margin-bottom:14px}
+.quiz small{display:block;margin-bottom:6px;font-weight:800;color:var(--tomato)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{font:700 1rem Nunito,sans-serif;padding:14px;border:3px solid var(--ink);border-radius:16px;background:var(--mint);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s}
+.opt:hover{transform:translateY(-3px);background:var(--sun)}
+.res{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.res img{width:150px;border-radius:6px 14px 6px 14px;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);animation:pop .6s both}
+.res .btns{margin-top:12px}
+.res button{font:700 1rem Nunito,sans-serif}
+.gal{display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:200px 200px;gap:14px}
+.gal figure{margin:0;position:relative;overflow:hidden;border-radius:22px 8px 22px 8px;border:3px solid var(--ink);cursor:zoom-in}
+.gal figure:first-child{grid-row:span 2}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.gal figure:hover img{transform:scale(1.06)}
+.gal .t2 img{object-position:35% 100%;scale:1.8;transform-origin:35% 100%}
+.gal .t3 img{object-position:100% 40%;scale:1.8;transform-origin:100% 40%}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px 12px 8px;background:linear-gradient(transparent,rgba(0,0,0,.65));color:#fff;font-weight:800;font-size:.9rem}
+#lb{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:20px;background:rgba(0,0,0,.82);cursor:zoom-out}
+#lb.on{display:grid}
+#lb img{max-width:100%;max-height:90vh;border-radius:12px;border:4px solid #fff}
+@media (max-width:700px){.opts{grid-template-columns:1fr}.gal{grid-template-columns:1fr 1fr;grid-template-rows:none}.gal figure{height:150px}.gal figure:first-child{grid-column:span 2;grid-row:auto;height:220px}}
+
+/* mode gelap + efek klik */
+#mode{width:42px;height:42px;flex:none;border-radius:50%;border:2px solid var(--ink);background:var(--sun);cursor:pointer;font-size:1.1rem}
+.bst{position:fixed;z-index:60;pointer-events:none;font-size:1.15rem;animation:burst .8s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+html[data-theme=dark]{--paper:#141F19;--ink:#ECEADB;--mint:#1D3626;--peach:#38261F;--butter:#38331A;--tan:#2A2418;--deep:#8FD99B}
+html[data-theme=dark] header{background:rgba(20,31,25,.94)}
+html[data-theme=dark] .lead{color:#C4C9B6}
+html[data-theme=dark] h2{text-shadow:2px 2px 0 #0A140E}
+html[data-theme=dark] #kanal{background:#0F2A18}
+html[data-theme=dark] footer{background:#0A120D;color:#E8E6DA}
+html[data-theme=dark] .step,html[data-theme=dark] .card,html[data-theme=dark] .faq details,html[data-theme=dark] .bcard,html[data-theme=dark] .quiz,html[data-theme=dark] .svc:nth-child(4n+4){background:#1F2D26}
+html[data-theme=dark] .btn{color:#2A2A22}
+html[data-theme=dark] .btn.green,html[data-theme=dark] .btn.red{color:#fff}
+html[data-theme=dark] .fact b,html[data-theme=dark] .note h3,html[data-theme=dark] .person:nth-child(3) small{color:#E3B27F}
+html[data-theme=dark] .person:nth-child(2) small{color:#FFB4A5}
+html[data-theme=dark] .mq img,html[data-theme=dark] .cv img,html[data-theme=dark] .res img{box-shadow:4px 4px 0 #000}
+html[data-theme=dark] .opt:hover{color:#2A2A22}
+</style>
+<script>document.documentElement.classList.add("js");try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<script>try{if(localStorage.getItem("tema")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+</head>
+<body>
+<div id="pb"></div>
+<a id="top" href="#beranda" aria-label="Kembali ke atas">&uarr;</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="monstera" viewBox="0 0 100 100">
+  <path fill="currentColor" d="M50 96C20 90 4 66 8 40 12 18 34 6 54 8c24 3 40 22 36 46-3 22-18 38-40 42z"/>
+  <path fill="none" stroke="#FFFCF3" stroke-width="5" stroke-linecap="round" d="M50 96V36M50 70 24 52M50 70 76 52M50 50 30 34M50 50 70 34M8 40l14 6M92 54 78 58"/>
+ </symbol>
+</svg>
+
+<header>
+ <div class="wrap bar">
+  <a class="brand" href="#beranda"><img src="img/logo.png" alt="Logo SMP IT Bina Bangsa Sejahtera"><span>SMP IT Bina Bangsa<br>Sejahtera</span></a>
+  <button id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav id="nav">
+   <a href="#beranda">Beranda</a>
+   <a href="#tentang">Tentang</a>
+   <a href="#layanan">Layanan</a>
+   <a href="#organisasi">Organisasi</a>
+   <a href="koleksi.html">E-Book</a>
+   <a href="#kontak">Kontak</a>
+   <a class="pill" href="https://perpustakaanbbs.infy.click/index.php">Digilib</a>
+  </nav>
+  <button id="mode" aria-label="Mode gelap">🌙</button>
+  <button id="theme" aria-label="Ganti mode terang atau gelap"></button>
+ </div>
+</header>
+
+<main>
+<section id="beranda">
+ <svg class="fall" aria-hidden="true" style="--x:8%;--s:34px;--d:14s;--l:-2s"><use href="#monstera"/></svg><svg class="fall" aria-hidden="true" style="--x:24%;--s:22px;--d:11s;--l:-7s"><use href="#monstera"/></svg><svg class="fall" aria-hidden="true" style="--x:46%;--s:40px;--d:16s;--l:-4s"><use href="#monstera"/></svg>
+ <svg class="leaf a" aria-hidden="true"><use href="#monstera"/></svg>
+ <div class="wrap hero">
+  <div>
+   <p class="kicker">Perpustakaan Al-Hikmah, SMP IT Bina Bangsa Sejahtera</p>
+   <h1>Kedai Baca</h1>
+   <p class="quote">Ketika kamu ragu akan sesuatu, carilah di perpustakaan.</p>
+   <div class="btns">
+    <a class="btn" href="https://perpustakaanbbs.infy.click/index.php">Cari buku di Digilib</a>
+    <a class="btn green" href="#layanan">Lihat layanan</a>
+   </div>
+   <p class="type">Di sini kamu bisa <b id="tw"></b></p>
+  </div>
+  <div class="photo">
+   <img data-tilt src="img/kedai-baca.jpg" alt="Dinding Kedai Baca dengan lukisan daun monstera dan piala-piala penghargaan">
+   <span class="stk s1">Buka Senin–Jumat</span><span class="stk s2">E-book kapan saja</span>
+   <div class="stk s1">Ayo<br>baca!</div><div class="stk s2">Buka Senin–Jumat</div>
+   <svg class="leaf b" aria-hidden="true"><use href="#monstera"/></svg>
+  </div>
+ </div>
+</section>
+
+<div class="strip" aria-hidden="true"><div><span>Baca</span><span>&#10022;</span><span>Cari</span><span>&#10022;</span><span>Belajar</span><span>&#10022;</span><span>Berbagi</span><span>&#10022;</span><span>Baca</span><span>&#10022;</span><span>Cari</span><span>&#10022;</span><span>Belajar</span><span>&#10022;</span><span>Berbagi</span><span>&#10022;</span><span>Baca</span><span>&#10022;</span><span>Cari</span><span>&#10022;</span><span>Belajar</span><span>&#10022;</span><span>Berbagi</span><span>&#10022;</span><span>Baca</span><span>&#10022;</span><span>Cari</span><span>&#10022;</span><span>Belajar</span><span>&#10022;</span><span>Berbagi</span><span>&#10022;</span><span>Baca</span><span>&#10022;</span><span>Cari</span><span>&#10022;</span><span>Belajar</span><span>&#10022;</span><span>Berbagi</span><span>&#10022;</span><span>Baca</span><span>&#10022;</span><span>Cari</span><span>&#10022;</span><span>Belajar</span><span>&#10022;</span><span>Berbagi</span><span>&#10022;</span></div></div>
+
+<section id="tentang">
+ <div class="wrap about">
+  <div>
+   <h2>Bukan sekadar tempat menyimpan buku</h2>
+   <p class="lead">Perpustakaan melayani siswa, guru, dan staf untuk membaca, mencari referensi, dan belajar literasi digital setiap hari. Katalog dikelola lewat SLiMS, jadi kamu bisa cek koleksi dan ketersediaannya kapan saja, dari mana saja.</p>
+   <a class="btn" href="#layanan">Layanan apa saja?</a>
+  </div>
+  <div class="facts">
+   <div class="fact"><b>Koleksi dan layanan</b>Buku cetak, referensi, dan sirkulasi lengkap.</div>
+   <div class="fact"><b>Kegiatan literasi</b>Pojok literasi dan bimbingan bersama pustakawan.</div>
+   <div class="fact"><b>Layanan digital</b>Katalog daring, e-book, dan flipbook dalam satu pintu.</div>
+  </div>
+ </div>
+</section>
+
+<section id="layanan">
+ <div class="wrap">
+  <h2>Mau ngapain di perpustakaan?</h2>
+  <p class="lead">Delapan layanan yang bisa dipakai siswa dan guru SMP IT BBS.</p>
+  <div class="grid">
+   <div class="svc"><span>🔄</span><h3>Sirkulasi</h3><p>Pinjam, perpanjang, dan kembalikan buku.</p></div>
+   <div class="svc"><span>📖</span><h3>Referensi</h3><p>Buku rujukan untuk dibaca di tempat.</p></div>
+   <div class="svc"><span>💻</span><h3>Digital Library</h3><p>Telusuri katalog buku secara daring.</p></div>
+   <div class="svc"><span>📱</span><h3>Koleksi Digital</h3><p>E-book dan buletin sekolah format digital.</p></div>
+   <div class="svc"><span>🛋️</span><h3>Pojok Literasi</h3><p>Ruang santai untuk membaca dan berdiskusi.</p></div>
+   <div class="svc"><span>💌</span><h3>Kotak Saran</h3><p>Sampaikan masukan untuk perpustakaan.</p></div>
+   <div class="svc"><span>🪴</span><h3>Ruang Baca</h3><p>Area nyaman untuk belajar dan membaca.</p></div>
+   <div class="svc"><span>🧑‍🏫</span><h3>Bimbingan Siswa</h3><p>Pendampingan riset dan tugas sekolah.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="cara">
+ <div class="wrap">
+  <h2>Cara pakai, tiga langkah</h2>
+  <p class="lead">Dari cari buku sampai kasih saran, semuanya bisa dilakukan dari HP.</p>
+  <div class="steps">
+   <div class="step"><i>1</i><h3>Cari bukunya</h3><p>Buka Digilib, ketik judul atau pengarang, lalu cek status tersedia.</p></div>
+   <div class="step"><i>2</i><h3>Pinjam atau baca</h3><p>Datang ke perpustakaan untuk meminjam, atau baca e-book langsung dari layarmu.</p></div>
+   <div class="step"><i>3</i><h3>Ceritakan pendapatmu</h3><p>Usul buku baru lewat formulir, dan ikuti kabar kegiatan di blog.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="rak">
+ <div class="wrap rak">
+  <div class="shelf-txt">
+   <h2>Rak e-book</h2>
+   <p class="lead">Klik salah satu buku di rak. Halamannya bisa dibalik seperti buku asli, dengan klik panah atau geser layar.</p>
+   <a class="btn green" href="koleksi.html">Lihat semua koleksi</a>
+  </div>
+  <div class="shelf">
+   <a class="bk b1" href="https://anyflip.com/bookcase/uuysa"><span>Koleksi Fiksi I</span></a>
+   <a class="bk b2" href="https://fliphtml5.com/bookcase/xmxag/"><span>Koleksi Fiksi II</span></a>
+   <a class="bk b3" href="https://drive.google.com/drive/folders/1k_t1tbY95E-DMAj8R8oWfcRPpuNY-6v3?usp=sharing"><span>Referensi (hanya baca)</span></a>
+  </div>
+ </div>
+</section>
+
+<section id="intip">
+ <div class="wrap"><h2>Sekilas isi rak</h2><p class="lead">Sebagian judul koleksi e-book kami. Arahkan kursor atau tahan sampul untuk menghentikan geserannya.</p></div>
+ <div class="mqs"><div class="mq"><img loading="lazy" src="img/begitusajakokrepot.jpg" alt="Sampul buku Begitu Saja Kok Repot!"><img loading="lazy" src="img/englishfn7.png" alt="Sampul buku English for Nusantara"><img loading="lazy" src="img/gadisrempah.png" alt="Sampul buku Gadis Rempah"><img loading="lazy" src="img/harrypbb.png" alt="Sampul buku Harry Potter and the Sorcerer's Stone"><img loading="lazy" src="img/jagapatib.png" alt="Sampul buku Jagapati Bumi"><img loading="lazy" src="img/kesatriap.png" alt="Sampul buku Kesatria Peniaga"><img loading="lazy" src="img/begitusajakokrepot.jpg" alt="Sampul buku Begitu Saja Kok Repot!"><img loading="lazy" src="img/englishfn7.png" alt="Sampul buku English for Nusantara"><img loading="lazy" src="img/gadisrempah.png" alt="Sampul buku Gadis Rempah"><img loading="lazy" src="img/harrypbb.png" alt="Sampul buku Harry Potter and the Sorcerer's Stone"><img loading="lazy" src="img/jagapatib.png" alt="Sampul buku Jagapati Bumi"><img loading="lazy" src="img/kesatriap.png" alt="Sampul buku Kesatria Peniaga"></div><div class="mq rev"><img loading="lazy" src="img/layartb.png" alt="Sampul buku Tetaplah Berlayar"><img loading="lazy" src="img/mengejarh.png" alt="Sampul buku Mengejar Haruto"><img loading="lazy" src="img/misipa.png" alt="Sampul buku Misi Penyelamatan Artha"><img loading="lazy" src="img/misteridtm.png" alt="Sampul buku Misteri Drumben Tengah Malam"><img loading="lazy" src="img/sekolahut.png" alt="Sampul buku Sekolah untuk Timur"><img loading="lazy" src="img/warnawao.png" alt="Sampul buku Warna-Warni Anak Ondel-Ondel"><img loading="lazy" src="img/layartb.png" alt="Sampul buku Tetaplah Berlayar"><img loading="lazy" src="img/mengejarh.png" alt="Sampul buku Mengejar Haruto"><img loading="lazy" src="img/misipa.png" alt="Sampul buku Misi Penyelamatan Artha"><img loading="lazy" src="img/misteridtm.png" alt="Sampul buku Misteri Drumben Tengah Malam"><img loading="lazy" src="img/sekolahut.png" alt="Sampul buku Sekolah untuk Timur"><img loading="lazy" src="img/warnawao.png" alt="Sampul buku Warna-Warni Anak Ondel-Ondel"></div></div>
+ <div class="wrap" style="margin-top:34px"><a class="btn" href="koleksi.html">Buka rak e-book</a></div>
+</section>
+
+<section id="kuis">
+ <div class="wrap">
+  <h2>Kuis: buku apa yang cocok untukmu?</h2>
+  <p class="lead">Tiga pertanyaan singkat, lalu kami carikan bacaan dari rak e-book.</p>
+  <div class="quiz card" id="quiz" aria-live="polite"></div>
+ </div>
+</section>
+
+<section id="galeri">
+ <div class="wrap">
+  <h2>Galeri kegiatan</h2>
+  <p class="lead">Potret suasana dan kegiatan di perpustakaan.</p>
+  <div class="gal" id="gal"></div>
+ </div>
+</section>
+
+<section id="kuis">
+ <div class="wrap">
+  <h2>Buku apa yang cocok untukmu?</h2>
+  <p class="lead">Jawab dua pertanyaan singkat, nanti kami pilihkan satu judul dari koleksi.</p>
+  <div class="quiz" id="quiz" aria-live="polite"></div>
+ </div>
+</section>
+
+<section id="galeri">
+ <div class="wrap">
+  <h2>Galeri kegiatan</h2>
+  <p class="lead">Sudut-sudut perpustakaan dan penghargaan sekolah. Klik foto untuk memperbesar.</p>
+  <!-- Untuk menambah foto kegiatan: salin satu blok figure dan ganti nama file serta keterangannya -->
+  <div class="gal">
+   <figure data-full="img/kedai-baca.jpg"><img loading="lazy" src="img/kedai-baca.jpg" alt="Dinding Kedai Baca dengan lukisan daun monstera"><figcaption>Dinding Kedai Baca</figcaption></figure>
+   <figure class="t2" data-full="img/kedai-baca.jpg"><img loading="lazy" src="img/kedai-baca.jpg" alt="Piala-piala penghargaan di Kedai Baca"><figcaption>Piala penghargaan</figcaption></figure>
+   <figure class="t3" data-full="img/kedai-baca.jpg"><img loading="lazy" src="img/kedai-baca.jpg" alt="Rak baca di Kedai Baca"><figcaption>Rak baca</figcaption></figure>
+  </div>
+ </div>
+</section>
+<div id="lb" role="dialog" aria-label="Foto diperbesar"><img alt=""></div>
+
+<section id="organisasi">
+ <div class="wrap">
+  <h2>Orang-orang di balik rak buku</h2>
+  <p class="lead">Pimpinan dan pengelola Perpustakaan SMP IT BBS.</p>
+  <div class="people" id="pustakawan">
+   <div class="person"><img src="img/paksyabar.png" alt="Bapak Syabar Suwardiman, S.Sos, M.Kom."><b>Syabar Suwardiman, S.Sos, M.Kom.</b><small>Kepala Sekolah</small></div>
+   <div class="person"><img src="img/bunailul.png" alt="Nailul Hikmah, M.Si."><b>Nailul Hikmah, M.Si.</b><small>Kepala Perpustakaan</small></div>
+   <div class="person"><img src="img/Gita.png" alt="Gita Safta Marlina"><b>Gita Safta Marlina</b><small>Pustakawan</small></div>
+  </div>
+ </div>
+</section>
+
+<section id="kanal">
+ <div class="wrap">
+  <h2>Semua pintu masuk di sini</h2>
+  <p class="lead">Pilih yang kamu butuhkan: cari buku, baca e-book, ikuti kabar terbaru, atau kirim saran.</p>
+  <div class="ch">
+   <a href="https://perpustakaanbbs.infy.click/index.php"><small>Digilib, SLiMS</small><h3>Katalog Perpustakaan</h3><p>Cari buku dan cek apakah masih tersedia.</p><em>Buka Digilib</em></a>
+   <a href="koleksi.html"><small>E-Resource, flipbook</small><h3>Koleksi Digital dan E-Book</h3><p>Baca buletin, majalah sekolah, dan e-book seperti buku sungguhan.</p><em>Buka E-Resource</em></a>
+   <a href="https://perpustakaanalhikmahbbs.wordpress.com/"><small>Blog</small><h3>Berita dan Kegiatan</h3><p>Kegiatan literasi, resensi buku, dan pengumuman perpustakaan.</p><em>Buka Blog</em></a>
+   <a href="https://forms.gle/B6VsESBsohJp7DZk6"><small>Kotak Saran</small><h3>Usul Buku atau Masukan</h3><p>Mau buku tertentu ada di sini? Tulis usulanmu.</p><em>Isi formulir</em></a>
+  </div>
+ </div>
+</section>
+
+<section id="faq">
+ <div class="wrap">
+  <h2>Sering ditanyakan</h2>
+  <div class="faq">
+   <details><summary>Bagaimana cara mencari buku?</summary><p>Buka Digilib, ketik judul, pengarang, atau subjek. Status ketersediaan buku tampil di halaman detail.</p></details>
+   <details><summary>Bagaimana cara membaca e-book?</summary><p>Buka Koleksi Digital, pilih koleksi, lalu balik halamannya seperti buku biasa. Buku referensi guru hanya bisa dibaca, tidak bisa diubah.</p></details>
+   <details><summary>Kapan perpustakaan buka?</summary><p>Senin sampai Jumat, pukul 07.00 sampai 15.30.</p></details>
+   <details><summary>Boleh usul judul buku baru?</summary><p>Boleh. Isi formulir Kotak Saran dan tulis judul yang kamu inginkan.</p></details>
+  </div>
+ </div>
+</section>
+
+<section id="kontak">
+ <div class="wrap">
+  <h2>Mampir atau hubungi kami</h2>
+  <p class="lead">Perpustakaan buka hari sekolah. Datang saja, pustakawan siap bantu.</p>
+  <div class="contact">
+   <dl class="card">
+    <dt>Alamat</dt><dd>JL. Batuhulung KM 7 RT 003 RW 002, Kel. Margajaya, Kec. Bogor Barat, Kota Bogor 16116<br><a href="https://www.google.com/maps/search/?api=1&query=SMP+IT+Bina+Bangsa+Sejahtera+Bogor">Lihat di peta</a></dd>
+    <dt>Email</dt><dd><a href="mailto:perpus.smpitbbs@gmail.com">perpus.smpitbbs@gmail.com</a></dd>
+    <dt>Jam buka</dt><dd>Senin sampai Jumat, 07.00 sampai 15.30</dd>
+   </dl>
+   <div class="note">
+    <h3>Ada kritik atau saran?</h3>
+    <p>Tulis kritik, saran, masukan, atau komentar tentang Perpustakaan SMP IT BBS di formulir.</p>
+    <a class="btn" href="https://forms.gle/B6VsESBsohJp7DZk6">Isi formulir saran</a>
+   </div>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap foot">
+  <div><b>Perpustakaan SMP IT BBS</b><br>Melayani siswa dan guru dalam membaca, riset, dan literasi digital.</div>
+  <div>&copy; 2026 Perpustakaan SMP IT BBS. <a href="#beranda">Kembali ke atas</a></div>
+ </div>
+</footer>
+
+<script>
+var b=document.getElementById('menu'),n=document.getElementById('nav');
+b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+n.addEventListener('click',function(e){if(e.target.tagName==='A'){n.classList.remove('open');b.setAttribute('aria-expanded',false)}});
+</script>
+<script>
+var pb=document.getElementById('pb'),tp=document.getElementById('top');
+addEventListener('scroll',function(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;pb.style.transform='scaleX('+(m>0?h.scrollTop/m:0)+')';tp.classList.toggle('show',h.scrollTop>500)},{passive:true});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('in');io.unobserve(t);setTimeout(function(){t.style.transitionDelay=''},1200)}})},{threshold:.12});
+document.querySelectorAll('section:not(#beranda) h2,.lead,.quiz,.gal figure,.fact,.svc,.person,.ch a,.card,.note,.step,.faq details,.shelf,.shelf-txt .btn').forEach(function(el,i){el.classList.add('rv');el.style.transitionDelay=(i%4)*90+'ms';io.observe(el)});
+</script>
+<script>
+(function(){
+var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var h=document.querySelector('#beranda h1');
+if(h){var t=h.textContent;h.setAttribute('aria-label',t);h.innerHTML='';t.split('').forEach(function(c,i){var e=document.createElement('span');e.className='ch1';e.setAttribute('aria-hidden','true');e.textContent=c;e.style.animationDelay=(.1+i*.07)+'s';h.appendChild(e)})}
+var w=['cari buku favoritmu','baca e-book dari HP','pinjam dan belajar bareng','kirim usul buku baru'],tw=document.getElementById('tw'),wi=0,ci=0,del=false;
+function tick(){if(!tw)return;var x=w[wi];ci+=del?-1:1;tw.textContent=x.slice(0,ci);var d=del?35:75;if(!del&&ci===x.length){del=true;d=1400}else if(del&&ci===0){del=false;wi=(wi+1)%w.length;d=350}setTimeout(tick,d)}
+if(tw){if(reduce)tw.textContent=w[0];else tick()}
+if(!reduce&&matchMedia('(pointer:fine)').matches)document.querySelectorAll('[data-tilt]').forEach(function(el){
+el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform='perspective(700px) rotateY('+x*14+'deg) rotateX('+-y*14+'deg) scale(1.04)'});
+el.addEventListener('pointerleave',function(){el.style.transform=''})});
+})();
+</script>
+<script>
+(function(){
+var r=matchMedia('(prefers-reduced-motion:reduce)').matches,t=document.getElementById('theme'),d=document.documentElement;
+function ic(){t.textContent=d.dataset.theme==='dark'?'\u2600\uFE0F':'\uD83C\uDF19'}
+ic();t.addEventListener('click',function(){d.dataset.theme=d.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('tema',d.dataset.theme)}catch(e){}ic()});
+if(!r)document.addEventListener('click',function(e){var em=['\uD83C\uDF43','\u2728','\uD83D\uDCD6'];for(var i=0;i<6;i++){var s=document.createElement('span'),a=i/6*6.28;s.textContent=em[i%3];s.style.cssText='position:fixed;left:'+e.clientX+'px;top:'+e.clientY+'px;pointer-events:none;z-index:50;font-size:18px';document.body.appendChild(s);s.animate([{transform:'translate(-50%,-50%) scale(.6)',opacity:1},{transform:'translate(calc(-50% + '+Math.cos(a)*44+'px),calc(-50% + '+Math.sin(a)*44+'px)) scale(1)',opacity:0}],{duration:650,easing:'ease-out'}).onfinish=(function(n){return function(){n.remove()}})(s)}});
+})();
+</script>
+<script>
+(function(){
+var Q=[['Akhir pekan idealmu?',['Menjelajah tempat baru','Memecahkan teka-teki','Ngobrol santai dengan keluarga dan teman']],['Suasana cerita favoritmu?',['Hutan, laut, atau negeri jauh','Malam yang sunyi dan penuh tanda tanya','Sekolah dan rumah yang hangat']],['Tokoh jagoan favoritmu?',['Pemberani yang suka mencoba','Teliti dan penasaran','Baik hati dan setia']]];
+var R=[{t:'Si Petualang',b:[['kesatriap.png','Kesatria Peniaga'],['mengejarh.png','Mengejar Haruto']]},{t:'Si Detektif',b:[['misteridtm.png','Misteri Drumben Tengah Malam'],['harrypbb.png','Harry Potter and the Sorcerer\u2019s Stone']]},{t:'Si Hangat',b:[['begitusajakokrepot.jpg','Begitu Saja Kok Repot!'],['sekolahut.png','Sekolah untuk Timur']]}];
+var box=document.getElementById('quiz'),n=0,sc=[0,0,0];
+function show(){
+ if(n<Q.length){var q=Q[n],h='<div class="qbar"><i style="width:'+(n/Q.length*100)+'%"></i></div><p>Pertanyaan '+(n+1)+' dari '+Q.length+'</p><h3>'+q[0]+'</h3>';
+  q[1].forEach(function(o,i){h+='<button class="opt" data-i="'+i+'">'+o+'</button>'});box.innerHTML=h;return}
+ var m=sc.indexOf(Math.max.apply(null,sc)),r=R[m],h='<div class="qbar"><i style="width:100%"></i></div><h3>Kamu cocok jadi '+r.t+'!</h3><p>Coba baca salah satu dari ini:</p><div class="qres">';
+ r.b.forEach(function(b){h+='<figure><img src="img/'+b[0]+'" alt="Sampul '+b[1]+'">'+b[1]+'</figure>'});
+ box.innerHTML=h+'</div><a class="btn" href="koleksi.html">Cari di rak e-book</a><button class="btn green" id="again">Main lagi</button>'}
+box.addEventListener('click',function(e){var o=e.target.closest('.opt');if(o){sc[+o.dataset.i]++;n++;show()}else if(e.target.id==='again'){n=0;sc=[0,0,0];show()}});
+show();
+var G=[['kedai-baca.jpg','Dinding Kedai Baca'],['kegiatan-1.jpg','Kegiatan literasi'],['kegiatan-2.jpg','Kegiatan literasi'],['kegiatan-3.jpg','Suasana perpustakaan'],['kegiatan-4.jpg','Suasana perpustakaan'],['kegiatan-5.jpg','Kegiatan perpustakaan'],['kegiatan-6.jpg','Kegiatan perpustakaan']],gal=document.getElementById('gal');
+G.forEach(function(g){var f=document.createElement('figure');f.className='pol';var im=new Image();im.alt=g[1];im.loading='lazy';im.onload=function(){f.appendChild(im);var c=document.createElement('figcaption');c.textContent=g[1];f.appendChild(c);gal.appendChild(f)};im.src='img/'+g[0]});
+})();
+</script>
+<script>
+(function(){
+var Q=[{q:'Kamu lagi pengin suasana apa?',o:['Petualangan seru','Misteri','Budaya Nusantara','Santai sehari-hari']},{q:'Mana yang lebih menarik?',o:[['Dunia sihir','Laut dan hutan'],['Teka-teki malam hari','Misi penyelamatan'],['Mitos dan legenda','Tradisi dan budaya'],['Cerita lucu sehari-hari','Sekolah di tempat jauh']]}];
+var R=[[['harrypbb.png',"Harry Potter and the Sorcerer's Stone"],['kesatriap.png','Kesatria Peniaga']],[['misteridtm.png','Misteri Drumben Tengah Malam'],['misipa.png','Misi Penyelamatan Artha']],[['jagapatib.png','Jagapati Bumi'],['warnawao.png','Warna-Warni Anak Ondel-Ondel']],[['begitusajakokrepot.jpg','Begitu Saja Kok Repot!'],['sekolahut.png','Sekolah untuk Timur']]];
+var box=document.getElementById('quiz'),a=0;
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x)e.textContent=x;return e}
+function ask(n){box.innerHTML='';box.appendChild(el('small','','Pertanyaan '+(n+1)+' dari 2'));box.appendChild(el('h3','',Q[n].q));var g=el('div','opts');(n?Q[1].o[a]:Q[0].o).forEach(function(t,i){var b=el('button','opt',t);b.type='button';b.onclick=function(){if(n){done(i)}else{a=i;ask(1)}};g.appendChild(b)});box.appendChild(g)}
+function done(j){var r=R[a][j];box.innerHTML='';box.appendChild(el('small','','Cocok untukmu'));var w=el('div','res'),im=el('img');im.src='img/'+r[0];im.alt='Sampul buku '+r[1];w.appendChild(im);var d=el('div');d.appendChild(el('h3','',r[1]));d.appendChild(el('p','','Cari bukunya di katalog Digilib, atau lihat rak e-book.'));var bs=el('div','btns'),l1=el('a','btn','Cari di Digilib'),l2=el('a','btn green','Rak e-book'),rb=el('button','btn','Ulangi');l1.href='https://perpustakaanbbs.infy.click/index.php';l2.href='koleksi.html';rb.type='button';rb.onclick=function(){ask(0)};[l1,l2,rb].forEach(function(x){bs.appendChild(x)});d.appendChild(bs);w.appendChild(d);box.appendChild(w)}
+if(box)ask(0);
+var lb=document.getElementById('lb');
+document.querySelectorAll('.gal figure').forEach(function(f){f.addEventListener('click',function(){lb.querySelector('img').src=f.dataset.full;lb.classList.add('on')})});
+lb.addEventListener('click',function(){lb.classList.remove('on')});
+addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('on')});
+})();
+</script>
+<script>
+(function(){
+var m=document.getElementById('mode');
+function sync(){var d=document.documentElement.dataset.theme==='dark';m.textContent=d?'☀️':'🌙';m.setAttribute('aria-label',d?'Mode terang':'Mode gelap')}
+sync();m.addEventListener('click',function(){var d=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=d?'dark':'light';try{localStorage.setItem('tema',d?'dark':'light')}catch(e){}sync()});
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches)document.addEventListener('click',function(e){var E=['📖','🌿','✨','📚'];for(var i=0;i<6;i++){var s=document.createElement('span'),a=Math.PI*2*i/6+Math.random()*.5,r=40+Math.random()*30;s.className='bst';s.textContent=E[i%4];s.style.left=e.clientX+'px';s.style.top=e.clientY+'px';s.style.setProperty('--dx',Math.cos(a)*r+'px');s.style.setProperty('--dy',Math.sin(a)*r+'px');s.style.setProperty('--r',(Math.random()*80-40)+'deg');document.body.appendChild(s);setTimeout(function(x){x.remove()},800,s)}});
+})();
+</script>
+</body>
+</html>
