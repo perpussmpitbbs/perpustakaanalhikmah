@@ -1,4 +1,6 @@
 
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -284,7 +286,7 @@ footer{background:#1C1F18;color:#E8E6DA;padding:34px 0;font-size:.93rem}
 <section id="organisasi">
  <div class="wrap">
   <h2>Struktur Organisasi</h2>
-  <div class="people"><div class="person"><img src="img/paksyabar.png" alt="Syabar Suwardiman, S.Sos, M.Kom."><b>Syabar Suwardiman, S.Sos, M.Kom.</b><small>Kepala Sekolah</small></div><div class="person"><img src="img/bunailul.png" alt="Nailul Hikmah, M.Si."><b>Nailul Hikmah, M.Si.</b><small>Kepala Perpustakaan</small></div><div class="person"><img src="img/bugita.png" alt="Gita Safta Marlina"><b>Gita Safta Marlina</b><small>Pustakawan</small></div></div>
+  <div class="people"><div class="person"><img src="img/paksyabar.png" alt="Syabar Suwardiman, S.Sos, M.Kom."><b>Syabar Suwardiman, S.Sos, M.Kom.</b><small>Kepala Sekolah</small></div><div class="person"><img src="img/bunailul.png" alt="Nailul Hikmah, M.Si."><b>Nailul Hikmah, M.Si.</b><small>Kepala Perpustakaan</small></div><div class="person"><img src="img/Gita.png" alt="Gita Safta Marlina"><b>Gita Safta Marlina</b><small>Pustakawan</small></div></div>
   <div class="stack" style="margin:40px auto 0"><details class="acc"><summary>Tentang perpustakaan</summary><p>Perpustakaan melayani siswa, guru, dan staf untuk membaca, mencari referensi, dan belajar literasi digital setiap hari. Katalog dikelola lewat SLiMS sehingga koleksi dan ketersediaan buku bisa dicek kapan saja.</p></details></div>
  </div>
 </section>
@@ -305,12 +307,12 @@ footer{background:#1C1F18;color:#E8E6DA;padding:34px 0;font-size:.93rem}
 <section id="pengunjung">
  <div class="wrap">
   <h2>Murid Rajin Berkunjung</h2>
-  <p class="lead">Semua murid yang pernah berkunjung tercatat di sini. Klik kelasnya untuk melihat daftar lengkap. Catatan: Data diperbarui secara bertahap. Jika ada data yang belum lengkap, saat ini masih dalam proses rekapitulasi. Jika terjadi kesalahan, silakan kunjungi perpustakaan.</p>
+  <p class="lead">Semua murid yang pernah berkunjung tercatat di sini — bukan cuma yang paling sering. Klik kelasnya untuk lihat daftar lengkap.</p>
   <p class="snote" id="kosong" hidden>Data pengunjung belum diisi.</p>
  
   <div class="podium" id="podium"></div>
   <div class="chiprow" id="chips"></div>
-  <p class="legenda">📝 = Menulis Judul Buku &nbsp;•&nbsp; 👀 = Berkunjung &amp; Baca Tanpa Tulis Judul</p>
+  <p class="legenda">📝 = sempat tulis judul buku &nbsp;•&nbsp; 👀 = berkunjung &amp; baca tanpa tulis judul</p>
  </div>
 </section>
  
@@ -342,7 +344,7 @@ footer{background:#1C1F18;color:#E8E6DA;padding:34px 0;font-size:.93rem}
  </div>
 </section>
  
-<section id="galeri"><div class="wrap"><h2>Galeri Kegiatan</h2><div class="gal" id="gal"></div></div></section>
+<section id="galeri"><div class="wrap"><h2>Galeri Kegiatan</h2><div class="gal" id="gal"></div><div style="text-align:center"><button class="btn g" type="button" id="galMore" hidden>Lihat Semua Foto</button></div></div></section>
  
 <section id="faq"><div class="wrap"><h2>Tanya Jawab</h2><div class="stack"><details class="acc"><summary>Bagaimana cara mencari buku?</summary><p>Buka Digilib, ketik judul, pengarang, atau subjek. Status ketersediaan tampil di halaman detail.</p></details><details class="acc"><summary>Bagaimana cara membaca e-book?</summary><p>Buka halaman E-Book, pilih rak, lalu balik halamannya seperti buku biasa. Buku referensi hanya bisa dibaca.</p></details><details class="acc"><summary>Kapan perpustakaan buka?</summary><p>Senin sampai Jumat, pukul 07.30 sampai 15.30.</p></details><details class="acc"><summary>Boleh usul judul buku baru?</summary><p>Boleh. Isi formulir Kotak Saran dan tulis judul yang kamu inginkan.</p></details></div></div></section>
  
@@ -395,9 +397,24 @@ var T=$('#total');T.dataset.n=tot;if(pend)$('#snote').hidden=false;
 function count(el,to,suf){if(rm){el.textContent=to+suf;return}var t0=null;function f(t){t0=t0||t;var p=Math.min((t-t0)/1600,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3)))+suf;if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
 var co=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){co.unobserve(e.target);count(e.target,+e.target.dataset.n,e.target.id==='total'&&pend?'+':'')}})},{threshold:.4});
 st.forEach(function(b){if(b.dataset.n!=='')co.observe(b)});co.observe(T);
-/* GALERI: simpan foto di folder img dengan nama kegiatan-1.jpg sampai kegiatan-6.jpg */
-var G=[['kedai-baca.jpg','Dinding Kedai Baca']].concat([1,2,3,4,5,6].map(function(i){return['kegiatan-'+i+'.jpg','Kegiatan perpustakaan']})),gal=$('#gal');
-G.forEach(function(g){var im=new Image();im.alt=g[1];im.onload=function(){var f=d.createElement('figure'),c=d.createElement('figcaption');c.textContent=g[1];f.appendChild(im);f.appendChild(c);gal.appendChild(f)};im.src='img/'+g[0]});
+/* GALERI: simpan foto di folder img dengan nama kegiatan-1.jpg, kegiatan-2.jpg, dst (urut, tanpa lompat angka).
+   Halaman otomatis mencoba sampai kegiatan-30.jpg — yang tidak ada filenya otomatis dilewati (tidak error).
+   Supaya halaman utama tidak kepanjangan, cuma GAL_AWAL foto pertama yang langsung tampil; sisanya
+   baru muncul setelah tombol "Lihat Semua Foto" diklik. */
+var GAL_AWAL=6,GAL_MAX=30;
+var G=[['kedai-baca.jpg','Dinding Kedai Baca']].concat(Array.from({length:GAL_MAX},function(_,i){return i+1}).map(function(i){return['kegiatan-'+i+'.jpg','Kegiatan membaca di perpustakaan']})),gal=$('#gal'),galBtn=$('#galMore'),galShown=0;
+G.forEach(function(g){var im=new Image();im.alt=g[1];im.onload=function(){
+ var f=d.createElement('figure'),c=d.createElement('figcaption');c.textContent=g[1];f.appendChild(im);f.appendChild(c);
+ if(galShown>=GAL_AWAL){f.hidden=true;f.dataset.extra='1'}
+ gal.appendChild(f);galShown++;
+ if($$('[data-extra]',gal).length&&galBtn)galBtn.hidden=false;
+};im.src='img/'+g[0]});
+if(galBtn)galBtn.onclick=function(){
+ var open=galBtn.textContent.indexOf('Sembunyikan')===0;
+ $$('[data-extra]',gal).forEach(function(f){f.hidden=open});
+ galBtn.textContent=open?'Lihat Semua Foto':'Sembunyikan Sebagian Foto';
+ if(open)galBtn.scrollIntoView({behavior:'smooth',block:'center'});
+};
 /* MURID RAJIN BERKUNJUNG: data ditanam di CSV_PENGUNJUNG (kolom: bulan,nama,kelas,kunjungan,dengan_judul,tanpa_judul).
    SEMUA murid yang pernah berkunjung ditampilkan (bukan cuma yang sering), supaya tidak ada yang namanya tidak muncul.
    kunjungan tetap dihitung walau tidak menulis judul buku — dengan_judul & tanpa_judul cuma penanda komposisinya. */
@@ -406,25 +423,42 @@ var AVPAL=['var(--leaf)','var(--tomato)','var(--wood)','#5B8DEF','#C9622E','#2F8
 function initials(nm){var w=(nm||'').trim().split(/\s+/);var s=((w[0]||'')[0]||'')+((w[1]||'')[0]||'');return s.toUpperCase()}
 function avcolor(nm){var h=0;for(var i=0;i<nm.length;i++)h=(h*31+nm.charCodeAt(i))>>>0;return AVPAL[h%AVPAL.length]}
  
-var PERKELAS={},TOP3OVERALL=[];
+var PERKELAS_BULAN={},PERKELAS_ALL={},BULAN_URUT=[],TOP3OVERALL=[];
 var KELAS_LIST=['VII 1','VII 2','VII 3','VIII 1','VIII 2','VIII 3','IX 1','IX 2','IX 3','Guru','Umum'];
+var BLN_IDX=['januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
+function bulanKey(label){var p=(label||'').trim().split(/\s+/);var bi=BLN_IDX.indexOf((p[0]||'').toLowerCase());var th=p[1]||'0000';return th+('0'+(bi+1)).slice(-2)}
  
 function buildPerKelas(R){
- var byKelasNama={}; // kelas -> {nama: {t,dj,tj}}  (dijumlahkan lintas semua bulan)
- var byNama={};
+ var byKelasBulanNama={}; // kelas -> bulan -> {nama:{t,dj,tj}}
+ var byKelasNama={};      // kelas -> {nama:{t,dj,tj}}  (lintas semua bulan, cadangan/opsional)
+ var byNama={};           // nama -> total (top3 keseluruhan, siswa saja)
+ var bulanSet={};
  R.forEach(function(o){
-  var k=o.kelas||'Lainnya',n=o.nama,c=+o.kunjungan||0,dj=+o.dengan_judul||0,tj=+o.tanpa_judul||0;
+  var k=o.kelas||'Lainnya',n=o.nama,b=o.bulan||'-',c=+o.kunjungan||0,dj=+o.dengan_judul||0,tj=+o.tanpa_judul||0;
+  bulanSet[b]=true;
+  byKelasBulanNama[k]=byKelasBulanNama[k]||{};
+  byKelasBulanNama[k][b]=byKelasBulanNama[k][b]||{};
+  var e1=byKelasBulanNama[k][b][n]=byKelasBulanNama[k][b][n]||{t:0,dj:0,tj:0};
+  e1.t+=c;e1.dj+=dj;e1.tj+=tj;
   byKelasNama[k]=byKelasNama[k]||{};
-  var e=byKelasNama[k][n]=byKelasNama[k][n]||{t:0,dj:0,tj:0};
-  e.t+=c;e.dj+=dj;e.tj+=tj;
+  var e2=byKelasNama[k][n]=byKelasNama[k][n]||{t:0,dj:0,tj:0};
+  e2.t+=c;e2.dj+=dj;e2.tj+=tj;
   if(k!=='Guru'&&k!=='Umum'){byNama[n]=(byNama[n]||0)+c}
  });
- var out={};
- Object.keys(byKelasNama).forEach(function(k){
-  out[k]=Object.keys(byKelasNama[k]).map(function(n){var e=byKelasNama[k][n];return [n,e.t,e.dj,e.tj]}).sort(function(a,b){return b[1]-a[1]});
+ var perBulan={};
+ Object.keys(byKelasBulanNama).forEach(function(k){
+  perBulan[k]={};
+  Object.keys(byKelasBulanNama[k]).forEach(function(b){
+   perBulan[k][b]=Object.keys(byKelasBulanNama[k][b]).map(function(n){var e=byKelasBulanNama[k][b][n];return [n,e.t,e.dj,e.tj]}).sort(function(a,b2){return b2[1]-a[1]});
+  });
  });
- var top3=Object.keys(byNama).map(function(n){return [n,byNama[n]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,3);
- return {perKelas:out, top3:top3};
+ var perAll={};
+ Object.keys(byKelasNama).forEach(function(k){
+  perAll[k]=Object.keys(byKelasNama[k]).map(function(n){var e=byKelasNama[k][n];return [n,e.t,e.dj,e.tj]}).sort(function(a,b2){return b2[1]-a[1]});
+ });
+ var bulanUrut=Object.keys(bulanSet).sort(function(a,b2){return bulanKey(b2).localeCompare(bulanKey(a))});
+ var top3=Object.keys(byNama).map(function(n){return [n,byNama[n]]}).sort(function(a,b2){return b2[1]-a[1]}).slice(0,3);
+ return {perBulan:perBulan, perAll:perAll, bulanUrut:bulanUrut, top3:top3};
 }
  
 function renderPodium(top3){
@@ -442,23 +476,41 @@ function renderPodium(top3){
  });
 }
  
+function listHtml(rows){
+ if(!rows||!rows.length)return '<p class="snote" style="margin-top:14px">Belum ada data untuk periode ini.</p>';
+ var html='<p style="font-size:.82rem;color:var(--muted);margin:8px 0 10px">'+rows.length+' murid berkunjung, diurutkan dari yang paling sering.</p><div>';
+ rows.forEach(function(r,i){
+  var nm=r[0],ct=r[1],dj=r[2],tj=r[3];
+  var tagbits=[];
+  if(dj)tagbits.push('📝'+dj);
+  if(tj)tagbits.push('👀'+tj);
+  html+='<div class="jitem"><span class="jr">'+(i+1)+'</span><span class="av" style="background:'+avcolor(nm)+'">'+initials(nm)+'</span><span class="jn">'+nm+'</span><span class="jc"><span class="tag">'+tagbits.join(' ')+'</span>'+ct+'x</span></div>';
+ });
+ html+='</div>';
+ return html;
+}
+ 
 function openKelas(kelas){
- var rows=PERKELAS[kelas]||[];
- var html='<h3>Semua Pengunjung — '+kelas+'</h3>';
- if(!rows.length){
+ var byBulan=PERKELAS_BULAN[kelas]||{};
+ var bulanAda=BULAN_URUT.filter(function(b){return byBulan[b]&&byBulan[b].length});
+ var html='<h3>'+kelas+'</h3>';
+ if(!bulanAda.length){
   html+='<p class="snote" style="margin-top:14px">Data pengunjung untuk '+kelas+' belum diisi.</p>';
- }else{
-  html+='<p style="font-size:.82rem;color:var(--muted);margin:8px 0 10px">'+rows.length+' murid pernah berkunjung, diurutkan dari yang paling sering.</p><div>';
-  rows.forEach(function(r,i){
-   var nm=r[0],ct=r[1],dj=r[2],tj=r[3];
-   var tagbits=[];
-   if(dj)tagbits.push('📝'+dj);
-   if(tj)tagbits.push('👀'+tj);
-   html+='<div class="jitem"><span class="jr">'+(i+1)+'</span><span class="av" style="background:'+avcolor(nm)+'">'+initials(nm)+'</span><span class="jn">'+nm+'</span><span class="jc"><span class="tag">'+tagbits.join(' ')+'</span>'+ct+'x</span></div>';
-  });
-  html+='</div>';
+  if(window.openPanel)window.openPanel(html);
+  return;
  }
+ html+='<div class="tabs" id="pbln" style="margin-top:10px"></div><div id="plist"></div>';
  if(window.openPanel)window.openPanel(html);
+ var tabwrap=$('#pbln'),listwrap=$('#plist');
+ function show(b){
+  $$('button',tabwrap).forEach(function(x){x.classList.toggle('on',x.dataset.b===b)});
+  listwrap.innerHTML = b==='__all__' ? listHtml(PERKELAS_ALL[kelas]) : listHtml(byBulan[b]);
+ }
+ var allBtn=d.createElement('button');allBtn.type='button';allBtn.dataset.b='__all__';allBtn.textContent='Semua Bulan';allBtn.onclick=function(){show('__all__')};tabwrap.appendChild(allBtn);
+ bulanAda.forEach(function(b){
+  var btn=d.createElement('button');btn.type='button';btn.dataset.b=b;btn.textContent=b;btn.onclick=function(){show(b)};tabwrap.appendChild(btn);
+ });
+ show(bulanAda[0]);
 }
  
 function renderChips(){
@@ -593,6 +645,58 @@ Agustus 2026,Qayreen Mizzani As-Syifa Nasution,IX 2,1,1,0
 Agustus 2026,Alena Khayra Malihasyifa,IX 3,1,0,1
 Agustus 2026,Ibu Halimatus Sa'diah,Guru,1,1,0
 Agustus 2026,Bapak Chaerul Tingkar,Guru,1,1,0
+Oktober 2026,Naufal Shidqi Ramadhani,VIII 1,10,7,3
+Oktober 2026,Fatih Luthfiali,VIII 2,10,8,2
+Oktober 2026,Muhammad Rasya Fabian Kaleo,VII 2,8,4,4
+Oktober 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,8,4,4
+Oktober 2026,Aletta Qisya Rabbani,VII 1,7,2,5
+Oktober 2026,Erlangga Banyu Pamungkas,VIII 1,7,7,0
+Oktober 2026,Muhammad Zahran Nugraha,VIII 2,7,5,2
+Oktober 2026,A'dn Kanzu Habibi,VIII 3,7,7,0
+Oktober 2026,Adam Rompis,VIII 3,7,7,0
+Oktober 2026,Zalfa Aliyya Hamidah,VII 1,6,4,2
+Oktober 2026,Bilqis Ashilla Kurnia,VII 1,5,3,2
+Oktober 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,5,4,1
+Oktober 2026,Muhammad Hadziq Rihadsyah,VIII 1,4,1,3
+Oktober 2026,Rangga Adijaya Putra,VIII 1,4,2,2
+Oktober 2026,Aisyah Alfafa Azhari,VIII 2,4,3,1
+Oktober 2026,Assyifa Sakinah Andrianov,VIII 2,4,4,0
+Oktober 2026,Muhammad Naufal Alfarizki,VIII 3,4,3,1
+Oktober 2026,Devan Muharam Wiriadibrata,IX 1,4,4,0
+Oktober 2026,Raisa Gendis Adisty,VII 1,3,0,3
+Oktober 2026,Affan Alidrisi Muhtar,VII 2,3,3,0
+Oktober 2026,Muhammad Zumar,VIII 1,3,0,3
+Oktober 2026,Afia Najah Kasturi Naim,VIII 1,3,3,0
+Oktober 2026,Kayumi Puteri Mutiara,VIII 2,3,0,3
+Oktober 2026,Aulia Maharani,IX 3,3,0,3
+Oktober 2026,Arfhio Raqilla Budiwantoro,VIII 1,2,1,1
+Oktober 2026,Humayra Nurainayya,VIII 1,2,0,2
+Oktober 2026,Muliyantika Hasanah,VIII 1,2,0,2
+Oktober 2026,Alena Farannisa Salsabila,VIII 1,2,1,1
+Oktober 2026,Raffasya Alby Prabundani,VIII 2,2,2,0
+Oktober 2026,Fabbyan Athaya payan,VIII 2,2,1,1
+Oktober 2026,Farhan Ikhlas Nurrahman,VIII 3,2,2,0
+Oktober 2026,Aqila Dearly Yudistira,VIII 3,2,1,1
+Oktober 2026,Catherine Eiliya Fahima,IX 1,2,1,1
+Oktober 2026,Kayyisah Noo Afifah Arifin,IX 2,2,0,2
+Oktober 2026,Alena Khayra Malihasyifa,IX 3,2,1,1
+Oktober 2026,Keiko Naa'imatunnisaai Mashfuufah,VII 1,1,0,1
+Oktober 2026,Maeda Belva Adenaya Noer,VII 2,1,1,0
+Oktober 2026,Mumtaz Khoirul Amal,VIII 1,1,1,0
+Oktober 2026,Kasyfi Dzaki Husein,VIII 1,1,1,0
+Oktober 2026,Lujna Kamila,VIII 1,1,0,1
+Oktober 2026,Danish Athallah Karim,VIII 2,1,1,0
+Oktober 2026,Annida Savitri,VIII 2,1,1,0
+Oktober 2026,Hana Annisa,VIII 2,1,1,0
+Oktober 2026,Al Farraz Caesar Munandar,VIII 3,1,1,0
+Oktober 2026,Muhammad Zayyan Majid,VIII 3,1,1,0
+Oktober 2026,Alvita Adelia Sudrajat,VIII 3,1,1,0
+Oktober 2026,Bunga Qurrotu Ainii Nasution,VIII 3,1,1,0
+Oktober 2026,Shafiya Zulaikha Putri,VIII 3,1,1,0
+Oktober 2026,Aydin Rhesa Maulana,IX 2,1,0,1
+Oktober 2026,Tirta Tri Patria,IX 2,1,1,0
+Oktober 2026,Zaim Syauqi Alhusen,IX 3,1,0,1
+Oktober 2026,Bapak M. N. Wiguna,Guru,1,1,0
 September 2026,Adam Rompis,VIII 3,9,8,1
 September 2026,Afia Najah Kasturi Naim,VIII 1,8,8,0
 September 2026,Devan Muharam Wiriadibrata,IX 1,8,8,0
@@ -601,20 +705,21 @@ September 2026,Erlangga Banyu Pamungkas,VIII 1,6,6,0
 September 2026,Assyifa Sakinah Andrianov,VIII 2,6,6,0
 September 2026,Farhan Ikhlas Nurrahman,VIII 3,6,6,0
 September 2026,Aydin Rhesa Maulana,IX 2,6,6,0
-September 2026,Naufal Shidqi Ramadhani,VIII 1,4,3,1
+September 2026,Naufal Shidqi Ramadhani,VIII 1,5,3,2
+September 2026,Fatih Luthfiali,VIII 2,5,1,4
+September 2026,Alena Khayra Malihasyifa,IX 3,5,2,3
+September 2026,Muhammad Rasya Fabian Kaleo,VII 2,4,0,4
 September 2026,Muhammad Zumar,VIII 1,4,1,3
-September 2026,Fatih Luthfiali,VIII 2,4,1,3
 September 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,4,4,0
 September 2026,Muhammad Zahran Nugraha,VIII 2,4,4,0
 September 2026,A'dn Kanzu Habibi,VIII 3,4,4,0
 September 2026,Alvita Adelia Sudrajat,VIII 3,4,3,1
 September 2026,Muhammad Naufal Alfarizki,VIII 3,4,4,0
 September 2026,Tirta Tri Patria,IX 2,4,3,1
-September 2026,Alena Khayra Malihasyifa,IX 3,4,2,2
-September 2026,Muhammad Rasya Fabian Kaleo,VII 2,3,0,3
 September 2026,Kanza Naveen Putri Zulfikar,VII 2,3,3,0
 September 2026,Fakhirah Bassam Septariana,VII 3,3,3,0
 September 2026,Arfhio Raqilla Budiwantoro,VIII 1,3,1,2
+September 2026,Fabbyan Athaya payan,VIII 2,3,3,0
 September 2026,Shofiyyah Miratul Izzah,VIII 3,3,3,0
 September 2026,Catherine Eiliya Fahima,IX 1,3,3,0
 September 2026,Aulia Maharani,IX 3,3,3,0
@@ -624,7 +729,6 @@ September 2026,Malikah Azzahra Siregar,VII 3,2,1,1
 September 2026,Muhammad Hadziq Rihadsyah,VIII 1,2,1,1
 September 2026,Bara'ah Atha Azzahra,VIII 1,2,0,2
 September 2026,Raffasya Alby Prabundani,VIII 2,2,2,0
-September 2026,Fabbyan Athaya payan,VIII 2,2,2,0
 September 2026,Bunga Qurrotu Ainii Nasution,VIII 3,2,2,0
 September 2026,Mahyra Putri Ivanka,IX 1,2,2,0
 September 2026,Aletta Qisya Rabbani,VII 1,1,1,0
@@ -643,6 +747,7 @@ September 2026,Rasya Hadi Prawiro Wicaksono,VIII 1,1,1,0
 September 2026,Rangga Adijaya Putra,VIII 1,1,0,1
 September 2026,Adreena Afiya Fitri,VIII 2,1,1,0
 September 2026,Shahila Ramadani Rahman,VIII 2,1,1,0
+September 2026,Danish Athallah Karim,VIII 2,1,0,1
 September 2026,Faeyza Nabil Akbar,VIII 3,1,1,0
 September 2026,Kenzie Alarik Maldini,VIII 3,1,0,1
 September 2026,Tsabiah Tri Patria,IX 1,1,1,0
@@ -658,7 +763,7 @@ September 2026,Muhamad Zaky Pratama,IX 3,1,1,0
 try{
  var R=parse(CSV_PENGUNJUNG);
  if(!R.length)throw 0;
- var built=buildPerKelas(R);PERKELAS=built.perKelas;TOP3OVERALL=built.top3;
+ var built=buildPerKelas(R);PERKELAS_BULAN=built.perBulan;PERKELAS_ALL=built.perAll;BULAN_URUT=built.bulanUrut;TOP3OVERALL=built.top3;
  renderPodium(TOP3OVERALL);renderChips();
 }catch(e){$('#kosong').hidden=false;renderChips()}
 })();
@@ -791,9 +896,9 @@ function startQuiz(){
  
 /* ---------- Game 4: Kenalan Sama Perpus ---------- */
 var KENALQ=[
- {q:'Siapa Kepala Sekolah SMP IT Bina Bangsa Sejahtera?',o:['Ibu Nailul Hikmah, M.Si.','Bapak Syabar Suwardiman, S.Sos, M.Kom.','Bapak Chaerul Tingkar, S.Pd.','Ibu Isrike Wardah, S.Pd.'],a:1},
- {q:'Siapa Kepala Perpustakaan Al-Hikmah?',o:['Ibu Nailul Hikmah, M.Si.','Bapak Syabar Suwardiman, S.Sos, M.Kom.','Ibu Gita Safta Marlina','Ibu Isrike Wardah, S.Pd.'],a:0},
- {q:'Siapa pustakawan yang bertugas melayani peminjaman sehari-hari?',o:['Ibu Nailul Hikmah, M.Si.','Bapak Syabar Suwardiman, S.Sos, M.Kom.','Ibu Gita Safta Marlina','Bapak Chaerul Tingkar, S.Pd.'],a:2},
+ {q:'Siapa Kepala Sekolah SMP IT Bina Bangsa Sejahtera?',o:['Nailul Hikmah, M.Si.','Syabar Suwardiman, S.Sos, M.Kom.','Gita Safta Marlina','Bu Halimatus'],a:1},
+ {q:'Siapa Kepala Perpustakaan Al-Hikmah?',o:['Nailul Hikmah, M.Si.','Syabar Suwardiman, S.Sos, M.Kom.','Gita Safta Marlina','Bu Aisyah'],a:0},
+ {q:'Siapa pustakawan yang bertugas melayani peminjaman sehari-hari?',o:['Nailul Hikmah, M.Si.','Syabar Suwardiman, S.Sos, M.Kom.','Gita Safta Marlina','Pak Chaerul'],a:2},
  {q:'Apa yang DILARANG dibawa masuk ke dalam ruang perpustakaan?',o:['Buku catatan','Makanan dan minuman','Pensil','Tas'],a:1},
  {q:'Setiap habis membaca buku, sebaiknya kita…',o:['Menulis judul buku yang dibaca di buku kunjungan','Membawa pulang diam-diam','Melipat halamannya biar ingat','Membiarkannya di lantai'],a:0},
  {q:'Kode atau nomor yang tertempel di punggung buku (nomor klasifikasi) gunanya untuk…',o:['Hiasan supaya buku terlihat rapi','Menunjukkan kategori/subjek buku agar mudah dicari & disusun di rak','Menunjukkan harga buku','Tanda buku itu sudah dibaca'],a:1},
@@ -839,6 +944,8 @@ $$('.game-card').forEach(function(btn){
 </body>
 </html>
  
+
+
 
 
 
