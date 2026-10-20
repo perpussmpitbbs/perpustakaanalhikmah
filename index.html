@@ -892,42 +892,6 @@ function startQuiz(){
  render();
 }
  
-/* ---------- Game 4: Kenalan Sama Perpus ---------- */
-var KENALQ=[
- {q:'Siapa Kepala Sekolah SMP IT Bina Bangsa Sejahtera?',o:['Nailul Hikmah, M.Si.','Syabar Suwardiman, S.Sos, M.Kom.','Gita Safta Marlina','Bu Halimatus'],a:1},
- {q:'Siapa Kepala Perpustakaan Al-Hikmah?',o:['Nailul Hikmah, M.Si.','Syabar Suwardiman, S.Sos, M.Kom.','Gita Safta Marlina','Bu Aisyah'],a:0},
- {q:'Siapa pustakawan yang bertugas melayani peminjaman sehari-hari?',o:['Nailul Hikmah, M.Si.','Syabar Suwardiman, S.Sos, M.Kom.','Gita Safta Marlina','Pak Chaerul'],a:2},
- {q:'Apa yang DILARANG dibawa masuk ke dalam ruang perpustakaan?',o:['Buku catatan','Makanan dan minuman','Pensil','Tas'],a:1},
- {q:'Setiap habis membaca buku, sebaiknya kita…',o:['Menulis judul buku yang dibaca di buku kunjungan','Membawa pulang diam-diam','Melipat halamannya biar ingat','Membiarkannya di lantai'],a:0},
- {q:'Kode atau nomor yang tertempel di punggung buku (nomor klasifikasi) gunanya untuk…',o:['Hiasan supaya buku terlihat rapi','Menunjukkan kategori/subjek buku agar mudah dicari & disusun di rak','Menunjukkan harga buku','Tanda buku itu sudah dibaca'],a:1},
- {q:'Kalau sudah selesai baca di tempat, buku sebaiknya…',o:['Ditaruh sembarang di rak mana saja','Dikembalikan ke petugas atau rak asal dengan rapi','Disembunyikan supaya besok masih ada','Dibawa pulang tanpa izin'],a:1}
-];
-function startKenal(){
- var order=shuffle(KENALQ.map(function(_,i){return i})),idx=0,score=0;
- function render(){
-  if(idx>=order.length){
-   var tier=score===order.length?'Kamu Sahabat Perpus Sejati! 🏛️':score>=order.length-2?'Keren, udah kenal banget sama perpus! 🌟':'Yuk main lagi biar makin kenal perpusnya! 💪';
-   $('.gbody',ov).innerHTML='<h3>Kenalan Sama Perpus</h3><div class="gresult"><div class="big">🏛️</div><p style="font-weight:800;color:var(--deep)">'+tier+'</p><p style="margin-top:6px">Skormu: '+score+' / '+order.length+'</p><button class="btn g gagain" type="button">Main Lagi</button></div>';
-   $('.gagain',ov).onclick=startKenal;
-   return;
-  }
-  var item=KENALQ[order[idx]];
-  $('.gbody',ov).innerHTML='<h3>Kenalan Sama Perpus</h3><p class="gq">Soal '+(idx+1)+' dari '+order.length+'</p><p style="font-weight:700;margin-bottom:10px">'+item.q+'</p><div class="gopts"></div><p class="gfeedback" id="fb"></p><p class="gscore">Skor: '+score+'</p>';
-  var box=$('.gopts',ov),answered=false;
-  item.o.forEach(function(opt,oi){
-   var b=d.createElement('button');b.type='button';b.textContent=opt;
-   b.onclick=function(){
-    if(answered)return;answered=true;
-    var fb=$('#fb',ov);
-    if(oi===item.a){b.classList.add('correct');score++;fb.textContent='Benar! 🎉';fb.className='gfeedback ok'}
-    else{b.classList.add('wrong');$$('.gopts button',ov)[item.a].classList.add('correct');fb.textContent='Belum tepat, jawaban yang benar: '+item.o[item.a];fb.className='gfeedback no'}
-    setTimeout(function(){idx++;render()},1200);
-   };
-   box.appendChild(b);
-  });
- }
- render();
-}
  
 /* ---------- pemicu dari kartu game ---------- */
 $$('.game-card').forEach(function(btn){
