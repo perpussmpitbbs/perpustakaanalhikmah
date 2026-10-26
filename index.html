@@ -144,11 +144,13 @@ html[data-theme=dark] .acc{border-color:#587060}
 .chip{font:800 .85rem Nunito,sans-serif;padding:7px 15px;border-radius:99px;border:2.5px solid #2A2A22;background:var(--card);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s}
 .chip:hover{background:var(--mint);transform:translateY(-2px)}
 .legenda{margin-top:14px;font-size:.78rem;color:var(--muted);text-align:center}
-.jitem{display:flex;align-items:center;gap:8px;padding:5px 2px;font-size:.88rem}
+.jitem{display:flex;align-items:center;gap:8px;padding:6px 2px;font-size:.88rem}
 .jitem:nth-child(odd){background:var(--mint)}
-.jitem .av{width:30px;height:30px;font-size:.66rem}
+.jitem .av{width:30px;height:30px;font-size:.66rem;align-self:flex-start;margin-top:1px}
 .jitem .jr{font:700 .92rem Fredoka,sans-serif;width:18px;text-align:center;color:var(--wood);flex:none}
-.jitem .jn{font-weight:800;line-height:1.2}
+.jitem .jninfo{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.jitem .jn{font-weight:800}
+.jitem .jtgl{font-size:.7rem;color:var(--muted);font-weight:700;white-space:normal;word-break:break-word}
 .jitem .jc{margin-left:auto;font-weight:800;color:var(--leaf);font-size:.78rem;white-space:nowrap;display:flex;align-items:center;gap:5px}
 .jitem .jc .tag{font-weight:700;color:var(--muted);font-size:.72rem}
 /* ---- Game ---- */
@@ -284,7 +286,7 @@ footer{background:#1C1F18;color:#E8E6DA;padding:34px 0;font-size:.93rem}
 <section id="organisasi">
  <div class="wrap">
   <h2>Struktur Organisasi</h2>
-  <div class="people"><div class="person"><img src="img/paksyabar.png" alt="Syabar Suwardiman, S.Sos, M.Kom."><b>Syabar Suwardiman, S.Sos, M.Kom.</b><small>Kepala Sekolah</small></div><div class="person"><img src="img/bunailul.png" alt="Nailul Hikmah, M.Si."><b>Nailul Hikmah, M.Si.</b><small>Kepala Perpustakaan</small></div><div class="person"><img src="img/bugita.png" alt="Gita Safta Marlina"><b>Gita Safta Marlina</b><small>Pustakawan</small></div></div>
+  <div class="people"><div class="person"><img src="img/paksyabar.png" alt="Syabar Suwardiman, S.Sos, M.Kom."><b>Syabar Suwardiman, S.Sos, M.Kom.</b><small>Kepala Sekolah</small></div><div class="person"><img src="img/bunailul.png" alt="Nailul Hikmah, M.Si."><b>Nailul Hikmah, M.Si.</b><small>Kepala Perpustakaan</small></div><div class="person"><img src="img/Gita.png" alt="Gita Safta Marlina"><b>Gita Safta Marlina</b><small>Pustakawan</small></div></div>
   <div class="stack" style="margin:40px auto 0"><details class="acc"><summary>Tentang perpustakaan</summary><p>Perpustakaan melayani siswa, guru, dan staf untuk membaca, mencari referensi, dan belajar literasi digital setiap hari. Katalog dikelola lewat SLiMS sehingga koleksi dan ketersediaan buku bisa dicek kapan saja.</p></details></div>
  </div>
 </section>
@@ -337,7 +339,6 @@ footer{background:#1C1F18;color:#E8E6DA;padding:34px 0;font-size:.93rem}
    <button class="game-card" type="button" data-game="mood"><div class="gi">🧭</div><h3>Lagi Pengen Baca Apa?</h3><p>Jawab 4 pertanyaan singkat, dapatkan rekomendasi genre buku buatmu.</p></button>
    <button class="game-card" type="button" data-game="memo"><div class="gi">🧠</div><h3>Memori Buku</h3><p>Cocokkan 8 pasang kartu bertema buku secepat mungkin.</p></button>
    <button class="game-card" type="button" data-game="quiz"><div class="gi">📚</div><h3>Tebak Buku</h3><p>5 pertanyaan seru seputar buku dan perpustakaan. Kumpulkan skor terbaikmu!</p></button>
-   <button class="game-card" type="button" data-game="kenal"><div class="gi">🏛️</div><h3>Kenalan Sama Perpus</h3><p>Siapa pustakawannya? Apa tata tertibnya? Yuk tes seberapa kenal kamu sama perpustakaan sendiri!</p></button>
   </div>
  </div>
 </section>
@@ -427,32 +428,34 @@ var BLN_IDX=['januari','februari','maret','april','mei','juni','juli','agustus',
 function bulanKey(label){var p=(label||'').trim().split(/\s+/);var bi=BLN_IDX.indexOf((p[0]||'').toLowerCase());var th=p[1]||'0000';return th+('0'+(bi+1)).slice(-2)}
  
 function buildPerKelas(R){
- var byKelasBulanNama={}; // kelas -> bulan -> {nama:{t,dj,tj}}
- var byKelasNama={};      // kelas -> {nama:{t,dj,tj}}  (lintas semua bulan, cadangan/opsional)
+ var byKelasBulanNama={}; // kelas -> bulan -> {nama:{t,dj,tj,tgl:Set}}
+ var byKelasNama={};      // kelas -> {nama:{t,dj,tj,tglPerBulan:{bulan:[tgl]}}}  (lintas semua bulan)
  var byNama={};           // nama -> total (top3 keseluruhan, siswa saja)
  var bulanSet={};
  R.forEach(function(o){
   var k=o.kelas||'Lainnya',n=o.nama,b=o.bulan||'-',c=+o.kunjungan||0,dj=+o.dengan_judul||0,tj=+o.tanpa_judul||0;
+  var tgl=(o.tanggal||'').split(';').filter(Boolean).map(function(x){return +x}).sort(function(a,b2){return a-b2});
   bulanSet[b]=true;
   byKelasBulanNama[k]=byKelasBulanNama[k]||{};
   byKelasBulanNama[k][b]=byKelasBulanNama[k][b]||{};
-  var e1=byKelasBulanNama[k][b][n]=byKelasBulanNama[k][b][n]||{t:0,dj:0,tj:0};
-  e1.t+=c;e1.dj+=dj;e1.tj+=tj;
+  var e1=byKelasBulanNama[k][b][n]=byKelasBulanNama[k][b][n]||{t:0,dj:0,tj:0,tgl:[]};
+  e1.t+=c;e1.dj+=dj;e1.tj+=tj;e1.tgl=e1.tgl.concat(tgl);
   byKelasNama[k]=byKelasNama[k]||{};
-  var e2=byKelasNama[k][n]=byKelasNama[k][n]||{t:0,dj:0,tj:0};
+  var e2=byKelasNama[k][n]=byKelasNama[k][n]||{t:0,dj:0,tj:0,tglPerBulan:{}};
   e2.t+=c;e2.dj+=dj;e2.tj+=tj;
+  if(tgl.length)e2.tglPerBulan[b]=tgl;
   if(k!=='Guru'&&k!=='Umum'){byNama[n]=(byNama[n]||0)+c}
  });
  var perBulan={};
  Object.keys(byKelasBulanNama).forEach(function(k){
   perBulan[k]={};
   Object.keys(byKelasBulanNama[k]).forEach(function(b){
-   perBulan[k][b]=Object.keys(byKelasBulanNama[k][b]).map(function(n){var e=byKelasBulanNama[k][b][n];return [n,e.t,e.dj,e.tj]}).sort(function(a,b2){return b2[1]-a[1]});
+   perBulan[k][b]=Object.keys(byKelasBulanNama[k][b]).map(function(n){var e=byKelasBulanNama[k][b][n];return [n,e.t,e.dj,e.tj,e.tgl]}).sort(function(a,b2){return b2[1]-a[1]});
   });
  });
  var perAll={};
  Object.keys(byKelasNama).forEach(function(k){
-  perAll[k]=Object.keys(byKelasNama[k]).map(function(n){var e=byKelasNama[k][n];return [n,e.t,e.dj,e.tj]}).sort(function(a,b2){return b2[1]-a[1]});
+  perAll[k]=Object.keys(byKelasNama[k]).map(function(n){var e=byKelasNama[k][n];return [n,e.t,e.dj,e.tj,e.tglPerBulan]}).sort(function(a,b2){return b2[1]-a[1]});
  });
  var bulanUrut=Object.keys(bulanSet).sort(function(a,b2){return bulanKey(b2).localeCompare(bulanKey(a))});
  var top3=Object.keys(byNama).map(function(n){return [n,byNama[n]]}).sort(function(a,b2){return b2[1]-a[1]}).slice(0,3);
@@ -474,7 +477,20 @@ function renderPodium(top3){
  });
 }
  
-function listHtml(rows){
+var BLN3=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function tglLabel(r, mode){
+ if(mode==='all'){
+  var tglPerBulan=r[4]||{};
+  var parts=Object.keys(tglPerBulan).sort(function(a,b){return bulanKey(a).localeCompare(bulanKey(b))}).map(function(b){
+   var bi=BLN_IDX.indexOf((b.split(' ')[0]||'').toLowerCase());
+   return (BLN3[bi]||b)+': '+tglPerBulan[b].join(', ');
+  });
+  return parts.join(' • ');
+ }
+ var tgl=r[4]||[];
+ return tgl.length? 'Tanggal: '+tgl.join(', ') : '';
+}
+function listHtml(rows, mode){
  if(!rows||!rows.length)return '<p class="snote" style="margin-top:14px">Belum ada data untuk periode ini.</p>';
  var html='<p style="font-size:.82rem;color:var(--muted);margin:8px 0 10px">'+rows.length+' murid berkunjung, diurutkan dari yang paling sering.</p><div>';
  rows.forEach(function(r,i){
@@ -482,7 +498,8 @@ function listHtml(rows){
   var tagbits=[];
   if(dj)tagbits.push('📝'+dj);
   if(tj)tagbits.push('👀'+tj);
-  html+='<div class="jitem"><span class="jr">'+(i+1)+'</span><span class="av" style="background:'+avcolor(nm)+'">'+initials(nm)+'</span><span class="jn">'+nm+'</span><span class="jc"><span class="tag">'+tagbits.join(' ')+'</span>'+ct+'x</span></div>';
+  var tl=tglLabel(r, mode);
+  html+='<div class="jitem"><span class="jr">'+(i+1)+'</span><span class="av" style="background:'+avcolor(nm)+'">'+initials(nm)+'</span><span class="jninfo"><span class="jn">'+nm+'</span>'+(tl?'<span class="jtgl">'+tl+'</span>':'')+'</span><span class="jc"><span class="tag">'+tagbits.join(' ')+'</span>'+ct+'x</span></div>';
  });
  html+='</div>';
  return html;
@@ -502,7 +519,7 @@ function openKelas(kelas){
  var tabwrap=$('#pbln'),listwrap=$('#plist');
  function show(b){
   $$('button',tabwrap).forEach(function(x){x.classList.toggle('on',x.dataset.b===b)});
-  listwrap.innerHTML = b==='__all__' ? listHtml(PERKELAS_ALL[kelas]) : listHtml(byBulan[b]);
+  listwrap.innerHTML = b==='__all__' ? listHtml(PERKELAS_ALL[kelas],'all') : listHtml(byBulan[b],'month');
  }
  var allBtn=d.createElement('button');allBtn.type='button';allBtn.dataset.b='__all__';allBtn.textContent='Semua Bulan';allBtn.onclick=function(){show('__all__')};tabwrap.appendChild(allBtn);
  bulanAda.forEach(function(b){
@@ -521,241 +538,269 @@ function renderChips(){
 }
  
 /* DATA PENGUNJUNG: ditanam langsung di sini (tidak perlu file data/pengunjung.csv lagi).
-   Format tiap baris: bulan,nama,kelas,kunjungan,dengan_judul,tanpa_judul
-   - kunjungan = total berkunjung (SELALU dihitung, tulis judul atau tidak)
+   Format tiap baris: bulan,nama,kelas,kunjungan,dengan_judul,tanpa_judul,tanggal
+   - kunjungan = total berkunjung dalam bulan itu (SELALU dihitung, tulis judul atau tidak)
    - dengan_judul = berapa kali dari kunjungan itu dia menulis judul buku
    - tanpa_judul = berapa kali berkunjung/baca tapi TIDAK menulis judul (dengan_judul+tanpa_judul harus = kunjungan)
+   - tanggal = tanggal-tanggal (hanya angka, 1-31) dalam bulan itu dia berkunjung, dipisah titik koma ";" tanpa spasi, contoh "3;7;15"
    Untuk update: tambah baris baru di bawah baris terakhir, JANGAN timpa baris lama.
    Kelas harus salah satu dari: VII 1, VII 2, VII 3, VIII 1, VIII 2, VIII 3, IX 1, IX 2, IX 3, Guru, Umum */
-var CSV_PENGUNJUNG = `bulan,nama,kelas,kunjungan,dengan_judul,tanpa_judul
-Agustus 2026,Devan Muharam Wiriadibrata,IX 1,15,15,0
-Agustus 2026,Aydin Rhesa Maulana,IX 2,13,11,2
-Agustus 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,11,2,9
-Agustus 2026,Assyifa Sakinah Andrianov,VIII 2,10,10,0
-Agustus 2026,Farhan Ikhlas Nurrahman,VIII 3,9,9,0
-Agustus 2026,Tirta Tri Patria,IX 2,9,7,2
-Agustus 2026,Raden Keya Chayra Rafani,VII 3,7,2,5
-Agustus 2026,Salsabila Fatisha Zahira,VII 3,7,1,6
-Agustus 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,7,5,2
-Agustus 2026,Alissa Syabania Wijaya,VIII 1,7,7,0
-Agustus 2026,Afia Najah Kasturi Naim,VIII 1,6,6,0
-Agustus 2026,Zaim Syauqi Alhusen,IX 3,6,0,6
-Agustus 2026,Muhammad Rasya Fabian Kaleo,VII 2,5,3,2
-Agustus 2026,Affan Alidrisi Muhtar,VII 2,5,3,2
-Agustus 2026,Naufal Shidqi Ramadhani,VIII 1,5,0,5
-Agustus 2026,Aisha Mahira Riffaya,VIII 1,5,5,0
-Agustus 2026,Bunga Qurrotu Ainii Nasution,VIII 3,5,5,0
-Agustus 2026,Aletta Qisya Rabbani,VII 1,4,4,0
-Agustus 2026,Arfhio Raqilla Budiwantoro,VIII 1,4,1,3
-Agustus 2026,Muhammad Zumar,VIII 1,4,1,3
-Agustus 2026,Khalika Naeema Wardhana,VIII 1,4,2,2
-Agustus 2026,Al Farraz Caesar Munandar,VIII 3,4,3,1
-Agustus 2026,Marrisa Humaira Khanza,VIII 3,4,4,0
-Agustus 2026,Muhammad Uwaish Al Kathiri,VIII 3,4,2,2
-Agustus 2026,Muhammad Zayyan Majid,VIII 3,4,4,0
-Agustus 2026,Lika Zahra Latifah,IX 2,4,4,0
-Agustus 2026,Asiyah Mahiroh Jayanegara,IX 2,4,4,0
-Agustus 2026,Hammam Haidar Hasan,IX 3,4,0,4
-Agustus 2026,Bilqis Ashilla Kurnia,VII 1,3,3,0
-Agustus 2026,Zalfa Aliyya Hamidah,VII 1,3,3,0
-Agustus 2026,Kanza Naveen Putri Zulfikar,VII 2,3,2,1
-Agustus 2026,Khaizura Yariqa Qatrunnada,VII 2,3,2,1
-Agustus 2026,Muhamad Risyan Al-Fathan,VII 2,3,3,0
-Agustus 2026,Hafika Farahdiba Adyamurti,VII 3,3,2,1
-Agustus 2026,Azara Syaira Ratifa,VII 3,3,1,2
-Agustus 2026,Mahira El Dzikra Riansyah,VII 3,3,2,1
-Agustus 2026,Lujna Kamila,VIII 1,3,0,3
-Agustus 2026,Humayra Nurainayya,VIII 1,3,0,3
-Agustus 2026,Muhammad Hadziq Rihadsyah,VIII 1,3,1,2
-Agustus 2026,Fatur Nur Rohman,VIII 1,3,0,3
-Agustus 2026,Alfarezel Giandra Lisiadi,VIII 1,3,0,3
-Agustus 2026,Aisyah Alfafa Azhari,VIII 2,3,0,3
-Agustus 2026,Aqila Dearly Yudistira,VIII 3,3,2,1
-Agustus 2026,Faeyza Nabil Akbar,VIII 3,3,0,3
-Agustus 2026,Muhammad Putra Hasan Alpaksi,VIII 3,3,1,2
-Agustus 2026,Shofiyyah Miratul Izzah,VIII 3,3,1,2
-Agustus 2026,Ayudia Inara Kusuma,IX 2,3,3,0
-Agustus 2026,Aulia Maharani,IX 3,3,2,1
-Agustus 2026,Shafiyah Nur Fildzah,VII 1,2,0,2
-Agustus 2026,Muhammad Faiz Ramadhan,VII 2,2,2,0
-Agustus 2026,Arsakha Yahya Hamizan,VII 3,2,0,2
-Agustus 2026,Fakhirah Bassam Septariana,VII 3,2,1,1
-Agustus 2026,Nino Habibie Putra Yulianto,VII 3,2,2,0
-Agustus 2026,Khansa Qurrata Ayun,VIII 1,2,1,1
-Agustus 2026,Afham Saadan Purnama,VIII 1,2,1,1
-Agustus 2026,Hana Annisa,VIII 2,2,2,0
-Agustus 2026,Annida Savitri,VIII 2,2,2,0
-Agustus 2026,Muhammad Rais Khairan,VIII 2,2,0,2
-Agustus 2026,Gio Keanu Alfahri,VIII 2,2,0,2
-Agustus 2026,Adinda Quinsya Adiwijaya,VIII 2,2,1,1
-Agustus 2026,Fatih Luthfiali,VIII 2,2,0,2
-Agustus 2026,Raden Muhammad Ahsan Mubarak Haryo K.,VIII 3,2,0,2
-Agustus 2026,Keanu Delfino Defast,VIII 3,2,1,1
-Agustus 2026,Athaya Kanaka Santana,VIII 3,2,2,0
-Agustus 2026,Shafiya Zulaikha Putri,VIII 3,2,2,0
-Agustus 2026,Almaira Naufalyn Adzra,VIII 3,2,0,2
-Agustus 2026,Zhaina Liandra Shaqila,IX 1,2,1,1
-Agustus 2026,Naurah Yasmin Khuzami,IX 2,2,2,0
-Agustus 2026,Sakura Indah Nikeisha Bella,IX 2,2,1,1
-Agustus 2026,Najwa Alma Suhada,IX 2,2,1,1
-Agustus 2026,Biagi Putra Lintang,VII 1,1,1,0
-Agustus 2026,Dhamara Alviano,VII 1,1,1,0
-Agustus 2026,Raisa Gendis Adisty,VII 1,1,1,0
-Agustus 2026,Muhammad Rais Khairan,VII 2,1,0,1
-Agustus 2026,Naaila Izzatunnisa,VII 2,1,1,0
-Agustus 2026,Alden Rafizqy Kurniawan,VII 2,1,1,0
-Agustus 2026,Djibril Raditaher Akhtarin,VII 2,1,1,0
-Agustus 2026,Rigel Gawza A.,VII 3,1,1,0
-Agustus 2026,Naila Fahira Izzatunisa,VII 3,1,0,1
-Agustus 2026,Syafiq Mainaki Ali,VII 3,1,0,1
-Agustus 2026,Danish Ghaisan Alkhalifi,VII 3,1,1,0
-Agustus 2026,Alena Farannisa Salsabila,VIII 1,1,0,1
-Agustus 2026,Muliyantika Hasanah,VIII 1,1,0,1
-Agustus 2026,Hafika Farahdiba Adyamuti,VIII 1,1,0,1
-Agustus 2026,Rasya Hadi Prawiro Wicaksono,VIII 1,1,1,0
-Agustus 2026,Bara'ah Atha Azzahra,VIII 1,1,1,0
-Agustus 2026,Khaira Hafiza,VIII 1,1,1,0
-Agustus 2026,Rangga Adijaya Putra,VIII 1,1,0,1
-Agustus 2026,Kayumi Puteri Mutiara,VIII 2,1,0,1
-Agustus 2026,Mohammad Faiq Fadhil,VIII 2,1,1,0
-Agustus 2026,Muhammad Rifqy Putra Prasetya,VIII 2,1,0,1
-Agustus 2026,Muhammad Putra Hasan Alpaksi,VIII 2,1,0,1
-Agustus 2026,Muhammad Syafwan Al-Ghifari,VIII 2,1,1,0
-Agustus 2026,Muhammad Elvaro Rizki,VIII 2,1,0,1
-Agustus 2026,Adreena Afiya Fitri,VIII 2,1,1,0
-Agustus 2026,Natasya Kayla Lathifah,VIII 2,1,1,0
-Agustus 2026,Ropiqoh Nurfadillah,VIII 2,1,1,0
-Agustus 2026,Muhammad Arkan Oktrakiya,VIII 2,1,1,0
-Agustus 2026,Muhammad Hadziq Rihadsyah,VIII 3,1,1,0
-Agustus 2026,Raka Ardi Wiguna,VIII 3,1,0,1
-Agustus 2026,Kaysan Afiff,VIII 3,1,1,0
-Agustus 2026,Fazila Maheswari Shaumi,VIII 3,1,1,0
-Agustus 2026,Asyilla Azalea Irawan,VIII 3,1,1,0
-Agustus 2026,Ratu Dinar Laila Kamil Adiningrat,VIII 3,1,0,1
-Agustus 2026,Livia Azizah Refliannie Al-Sarry,VIII 3,1,0,1
-Agustus 2026,Alvita Adelia Sudrajat,VIII 3,1,1,0
-Agustus 2026,Afia Najah Kasturi Naim,VIII 3,1,1,0
-Agustus 2026,Sitti Talitha Farras Nathania Nugroho,IX 1,1,1,0
-Agustus 2026,Fazilla Putri Pribadi,IX 1,1,0,1
-Agustus 2026,Arzhita Riani Firmansyah,IX 1,1,1,0
-Agustus 2026,Nadia Putri Karani,IX 2,1,1,0
-Agustus 2026,Qayreen Mizzani As-Syifa Nasution,IX 2,1,1,0
-Agustus 2026,Alena Khayra Malihasyifa,IX 3,1,0,1
-Agustus 2026,Ibu Halimatus Sa'diah,Guru,1,1,0
-Agustus 2026,Bapak Chaerul Tingkar,Guru,1,1,0
-Oktober 2026,Naufal Shidqi Ramadhani,VIII 1,10,7,3
-Oktober 2026,Fatih Luthfiali,VIII 2,10,8,2
-Oktober 2026,Muhammad Rasya Fabian Kaleo,VII 2,8,4,4
-Oktober 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,8,4,4
-Oktober 2026,Aletta Qisya Rabbani,VII 1,7,2,5
-Oktober 2026,Erlangga Banyu Pamungkas,VIII 1,7,7,0
-Oktober 2026,Muhammad Zahran Nugraha,VIII 2,7,5,2
-Oktober 2026,A'dn Kanzu Habibi,VIII 3,7,7,0
-Oktober 2026,Adam Rompis,VIII 3,7,7,0
-Oktober 2026,Zalfa Aliyya Hamidah,VII 1,6,4,2
-Oktober 2026,Bilqis Ashilla Kurnia,VII 1,5,3,2
-Oktober 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,5,4,1
-Oktober 2026,Muhammad Hadziq Rihadsyah,VIII 1,4,1,3
-Oktober 2026,Rangga Adijaya Putra,VIII 1,4,2,2
-Oktober 2026,Aisyah Alfafa Azhari,VIII 2,4,3,1
-Oktober 2026,Assyifa Sakinah Andrianov,VIII 2,4,4,0
-Oktober 2026,Muhammad Naufal Alfarizki,VIII 3,4,3,1
-Oktober 2026,Devan Muharam Wiriadibrata,IX 1,4,4,0
-Oktober 2026,Raisa Gendis Adisty,VII 1,3,0,3
-Oktober 2026,Affan Alidrisi Muhtar,VII 2,3,3,0
-Oktober 2026,Muhammad Zumar,VIII 1,3,0,3
-Oktober 2026,Afia Najah Kasturi Naim,VIII 1,3,3,0
-Oktober 2026,Kayumi Puteri Mutiara,VIII 2,3,0,3
-Oktober 2026,Aulia Maharani,IX 3,3,0,3
-Oktober 2026,Arfhio Raqilla Budiwantoro,VIII 1,2,1,1
-Oktober 2026,Humayra Nurainayya,VIII 1,2,0,2
-Oktober 2026,Muliyantika Hasanah,VIII 1,2,0,2
-Oktober 2026,Alena Farannisa Salsabila,VIII 1,2,1,1
-Oktober 2026,Raffasya Alby Prabundani,VIII 2,2,2,0
-Oktober 2026,Fabbyan Athaya payan,VIII 2,2,1,1
-Oktober 2026,Farhan Ikhlas Nurrahman,VIII 3,2,2,0
-Oktober 2026,Aqila Dearly Yudistira,VIII 3,2,1,1
-Oktober 2026,Catherine Eiliya Fahima,IX 1,2,1,1
-Oktober 2026,Kayyisah Noo Afifah Arifin,IX 2,2,0,2
-Oktober 2026,Alena Khayra Malihasyifa,IX 3,2,1,1
-Oktober 2026,Keiko Naa'imatunnisaai Mashfuufah,VII 1,1,0,1
-Oktober 2026,Maeda Belva Adenaya Noer,VII 2,1,1,0
-Oktober 2026,Mumtaz Khoirul Amal,VIII 1,1,1,0
-Oktober 2026,Kasyfi Dzaki Husein,VIII 1,1,1,0
-Oktober 2026,Lujna Kamila,VIII 1,1,0,1
-Oktober 2026,Danish Athallah Karim,VIII 2,1,1,0
-Oktober 2026,Annida Savitri,VIII 2,1,1,0
-Oktober 2026,Hana Annisa,VIII 2,1,1,0
-Oktober 2026,Al Farraz Caesar Munandar,VIII 3,1,1,0
-Oktober 2026,Muhammad Zayyan Majid,VIII 3,1,1,0
-Oktober 2026,Alvita Adelia Sudrajat,VIII 3,1,1,0
-Oktober 2026,Bunga Qurrotu Ainii Nasution,VIII 3,1,1,0
-Oktober 2026,Shafiya Zulaikha Putri,VIII 3,1,1,0
-Oktober 2026,Aydin Rhesa Maulana,IX 2,1,0,1
-Oktober 2026,Tirta Tri Patria,IX 2,1,1,0
-Oktober 2026,Zaim Syauqi Alhusen,IX 3,1,0,1
-Oktober 2026,Bapak M. N. Wiguna,Guru,1,1,0
-September 2026,Adam Rompis,VIII 3,9,8,1
-September 2026,Afia Najah Kasturi Naim,VIII 1,8,8,0
-September 2026,Devan Muharam Wiriadibrata,IX 1,8,8,0
-September 2026,Affan Alidrisi Muhtar,VII 2,7,7,0
-September 2026,Erlangga Banyu Pamungkas,VIII 1,6,6,0
-September 2026,Assyifa Sakinah Andrianov,VIII 2,6,6,0
-September 2026,Farhan Ikhlas Nurrahman,VIII 3,6,6,0
-September 2026,Aydin Rhesa Maulana,IX 2,6,6,0
-September 2026,Naufal Shidqi Ramadhani,VIII 1,5,3,2
-September 2026,Fatih Luthfiali,VIII 2,5,1,4
-September 2026,Alena Khayra Malihasyifa,IX 3,5,2,3
-September 2026,Muhammad Rasya Fabian Kaleo,VII 2,4,0,4
-September 2026,Muhammad Zumar,VIII 1,4,1,3
-September 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,4,4,0
-September 2026,Muhammad Zahran Nugraha,VIII 2,4,4,0
-September 2026,A'dn Kanzu Habibi,VIII 3,4,4,0
-September 2026,Alvita Adelia Sudrajat,VIII 3,4,3,1
-September 2026,Muhammad Naufal Alfarizki,VIII 3,4,4,0
-September 2026,Tirta Tri Patria,IX 2,4,3,1
-September 2026,Kanza Naveen Putri Zulfikar,VII 2,3,3,0
-September 2026,Fakhirah Bassam Septariana,VII 3,3,3,0
-September 2026,Arfhio Raqilla Budiwantoro,VIII 1,3,1,2
-September 2026,Fabbyan Athaya payan,VIII 2,3,3,0
-September 2026,Shofiyyah Miratul Izzah,VIII 3,3,3,0
-September 2026,Catherine Eiliya Fahima,IX 1,3,3,0
-September 2026,Aulia Maharani,IX 3,3,3,0
-September 2026,Aulia Sovie Putri,VII 2,2,2,0
-September 2026,Raden Keya Chayra Rafani,VII 3,2,0,2
-September 2026,Malikah Azzahra Siregar,VII 3,2,1,1
-September 2026,Muhammad Hadziq Rihadsyah,VIII 1,2,1,1
-September 2026,Bara'ah Atha Azzahra,VIII 1,2,0,2
-September 2026,Raffasya Alby Prabundani,VIII 2,2,2,0
-September 2026,Bunga Qurrotu Ainii Nasution,VIII 3,2,2,0
-September 2026,Mahyra Putri Ivanka,IX 1,2,2,0
-September 2026,Aletta Qisya Rabbani,VII 1,1,1,0
-September 2026,Zalfa Aliyya Hamidah,VII 1,1,1,0
-September 2026,Keiko Naa'imatunnisaai Mashfuufah,VII 1,1,1,0
-September 2026,Maeda Belva Adenaya Noer,VII 2,1,1,0
-September 2026,Naaila Izzatunnisa,VII 2,1,0,1
-September 2026,Shafira Titania Azizah,VII 3,1,1,0
-September 2026,Vania Cinta Kirana,VII 3,1,1,0
-September 2026,Salsabila Fatisha Zahira,VII 3,1,0,1
-September 2026,Syafira Tifania Azizah,VII 3,1,0,1
-September 2026,Kanaya Citra Hiranya,VII 3,1,0,1
-September 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,1,1,0
-September 2026,Humayra Nurainayya,VIII 1,1,0,1
-September 2026,Rasya Hadi Prawiro Wicaksono,VIII 1,1,1,0
-September 2026,Rangga Adijaya Putra,VIII 1,1,0,1
-September 2026,Adreena Afiya Fitri,VIII 2,1,1,0
-September 2026,Shahila Ramadani Rahman,VIII 2,1,1,0
-September 2026,Danish Athallah Karim,VIII 2,1,0,1
-September 2026,Faeyza Nabil Akbar,VIII 3,1,1,0
-September 2026,Kenzie Alarik Maldini,VIII 3,1,0,1
-September 2026,Tsabiah Tri Patria,IX 1,1,1,0
-September 2026,Najwa Alma Suhada,IX 2,1,1,0
-September 2026,Qayreen Mizzani As-Syifa Nasution,IX 2,1,1,0
-September 2026,Nizam Alvaro Setiawan,IX 2,1,1,0
-September 2026,Uwais Alwan Qarni,IX 2,1,0,1
-September 2026,Hammam Haidar Hasan,IX 3,1,0,1
-September 2026,Zaim Syauqi Alhusen,IX 3,1,0,1
-September 2026,Muhamad Zaky Pratama,IX 3,1,1,0
+var CSV_PENGUNJUNG = `bulan,nama,kelas,kunjungan,dengan_judul,tanpa_judul,tanggal
+Agustus 2026,Devan Muharam Wiriadibrata,IX 1,15,15,0,3;4;5;6;7;10;11;12;13;14;18;19;21;26;31
+Agustus 2026,Aydin Rhesa Maulana,IX 2,13,11,2,3;4;5;6;7;10;11;13;18;19;21;26;31
+Agustus 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,11,2,9,5;6;7;10;11;12;13;18;21;26;31
+Agustus 2026,Assyifa Sakinah Andrianov,VIII 2,10,10,0,7;10;11;12;14;18;19;20;26;27
+Agustus 2026,Farhan Ikhlas Nurrahman,VIII 3,9,9,0,5;6;7;10;13;14;18;20;26
+Agustus 2026,Tirta Tri Patria,IX 2,9,7,2,3;4;5;6;7;11;18;19;21
+Agustus 2026,Raden Keya Chayra Rafani,VII 3,7,2,5,6;7;10;11;26;31
+Agustus 2026,Salsabila Fatisha Zahira,VII 3,7,1,6,7;10;11;12;26;31
+Agustus 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,7,5,2,3;7;10;11;12;31
+Agustus 2026,Alissa Syabania Wijaya,VIII 1,7,7,0,6;7;10;11;26;27;31
+Agustus 2026,Afia Najah Kasturi Naim,VIII 1,6,6,0,10;11;12;18;26;31
+Agustus 2026,Zaim Syauqi Alhusen,IX 3,6,0,6,3;4;5;10;11;18
+Agustus 2026,Muhammad Rasya Fabian Kaleo,VII 2,5,3,2,5;6;7;19
+Agustus 2026,Affan Alidrisi Muhtar,VII 2,5,3,2,12;14;21;27;31
+Agustus 2026,Naufal Shidqi Ramadhani,VIII 1,5,0,5,5;6;7;19
+Agustus 2026,Aisha Mahira Riffaya,VIII 1,5,5,0,6;10;12;26;27
+Agustus 2026,Al Farraz Caesar Munandar,VIII 3,5,4,1,5;6;10;14
+Agustus 2026,Bunga Qurrotu Ainii Nasution,VIII 3,5,5,0,6;10;11;12;31
+Agustus 2026,Aletta Qisya Rabbani,VII 1,4,4,0,11;21;27;31
+Agustus 2026,Arfhio Raqilla Budiwantoro,VIII 1,4,1,3,5;6;7;19
+Agustus 2026,Muhammad Zumar,VIII 1,4,1,3,5;7;19
+Agustus 2026,Khalika Naeema Wardhana,VIII 1,4,2,2,7;11;12
+Agustus 2026,Marrisa Humaira Khanza,VIII 3,4,4,0,7;10;11;12
+Agustus 2026,Muhammad Uwaish Al Kathiri,VIII 3,4,2,2,10;11;12;14
+Agustus 2026,Muhammad Zayyan Majid,VIII 3,4,4,0,13;18;21;26
+Agustus 2026,Lika Zahra Latifah,IX 2,4,4,0,6;10;11;12
+Agustus 2026,Asiyah Mahiroh Jayanegara,IX 2,4,4,0,6;10;11;12
+Agustus 2026,Hammam Haidar Hasan,IX 3,4,0,4,6;10;13;19
+Agustus 2026,Bilqis Ashilla Kurnia,VII 1,3,3,0,21;27;31
+Agustus 2026,Zalfa Aliyya Hamidah,VII 1,3,3,0,21;27;31
+Agustus 2026,Kanza Naveen Putri Zulfikar,VII 2,3,2,1,3;6;12
+Agustus 2026,Khaizura Yariqa Qatrunnada,VII 2,3,2,1,7;10;11
+Agustus 2026,Muhamad Risyan Al-Fathan,VII 2,3,3,0,11;12;21
+Agustus 2026,Hafika Farahdiba Adyamurti,VII 3,3,2,1,3;6;12
+Agustus 2026,Azara Syaira Ratifa,VII 3,3,1,2,3;6;12
+Agustus 2026,Mahira El Dzikra Riansyah,VII 3,3,2,1,7;20
+Agustus 2026,Lujna Kamila,VIII 1,3,0,3,3;7
+Agustus 2026,Humayra Nurainayya,VIII 1,3,0,3,3;7
+Agustus 2026,Muhammad Hadziq Rihadsyah,VIII 1,3,1,2,5;19
+Agustus 2026,Fatur Nur Rohman,VIII 1,3,0,3,10;12;14
+Agustus 2026,Alfarezel Giandra Lisiadi,VIII 1,3,0,3,11;12;14
+Agustus 2026,Aisyah Alfafa Azhari,VIII 2,3,0,3,3;7
+Agustus 2026,Aqila Dearly Yudistira,VIII 3,3,2,1,3;7
+Agustus 2026,Faeyza Nabil Akbar,VIII 3,3,0,3,5;6
+Agustus 2026,Muhammad Putra Hasan Alpaksi,VIII 3,3,1,2,11;12;14
+Agustus 2026,Shofiyyah Miratul Izzah,VIII 3,3,1,2,26;27;31
+Agustus 2026,Ayudia Inara Kusuma,IX 2,3,3,0,12;19;20
+Agustus 2026,Aulia Maharani,IX 3,3,2,1,19;20;26
+Agustus 2026,Shafiyah Nur Fildzah,VII 1,2,0,2,10;11
+Agustus 2026,Muhammad Faiz Ramadhan,VII 2,2,2,0,11;12
+Agustus 2026,Arsakha Yahya Hamizan,VII 3,2,0,2,7
+Agustus 2026,Fakhirah Bassam Septariana,VII 3,2,1,1,10;11
+Agustus 2026,Nino Habibie Putra Yulianto,VII 3,2,2,0,10;12
+Agustus 2026,Khansa Qurrata Ayun,VIII 1,2,1,1,6;26
+Agustus 2026,Afham Saadan Purnama,VIII 1,2,1,1,6;14
+Agustus 2026,Hana Annisa,VIII 2,2,2,0,6;12
+Agustus 2026,Annida Savitri,VIII 2,2,2,0,6;12
+Agustus 2026,Muhammad Rais Khairan,VIII 2,2,0,2,6;10
+Agustus 2026,Gio Keanu Alfahri,VIII 2,2,0,2,6;11
+Agustus 2026,Adinda Quinsya Adiwijaya,VIII 2,2,1,1,7;27
+Agustus 2026,Fatih Luthfiali,VIII 2,2,0,2,12;19
+Agustus 2026,Raden Muhammad Ahsan Mubarak Haryo K.,VIII 3,2,0,2,6;11
+Agustus 2026,Keanu Delfino Defast,VIII 3,2,1,1,6;14
+Agustus 2026,Athaya Kanaka Santana,VIII 3,2,2,0,11;12
+Agustus 2026,Shafiya Zulaikha Putri,VIII 3,2,2,0,12;18
+Agustus 2026,Almaira Naufalyn Adzra,VIII 3,2,0,2,26;27
+Agustus 2026,Zhaina Liandra Shaqila,IX 1,2,1,1,6;27
+Agustus 2026,Naurah Yasmin Khuzami,IX 2,2,2,0,6;10
+Agustus 2026,Sakura Indah Nikeisha Bella,IX 2,2,1,1,6;27
+Agustus 2026,Najwa Alma Suhada,IX 2,2,1,1,27;31
+Agustus 2026,Biagi Putra Lintang,VII 1,1,1,0,10
+Agustus 2026,Dhamara Alviano,VII 1,1,1,0,10
+Agustus 2026,Raisa Gendis Adisty,VII 1,1,1,0,27
+Agustus 2026,Muhammad Rais Khairan,VII 2,1,0,1,5
+Agustus 2026,Naaila Izzatunnisa,VII 2,1,1,0,12
+Agustus 2026,Alden Rafizqy Kurniawan,VII 2,1,1,0,21
+Agustus 2026,Djibril Raditaher Akhtarin,VII 2,1,1,0,21
+Agustus 2026,Rigel Gawza A.,VII 3,1,1,0,10
+Agustus 2026,Naila Fahira Izzatunisa,VII 3,1,0,1,10
+Agustus 2026,Syafiq Mainaki Ali,VII 3,1,0,1,20
+Agustus 2026,Danish Ghaisan Alkhalifi,VII 3,1,1,0,21
+Agustus 2026,Alena Farannisa Salsabila,VIII 1,1,0,1,3
+Agustus 2026,Muliyantika Hasanah,VIII 1,1,0,1,3
+Agustus 2026,Hafika Farahdiba Adyamuti,VIII 1,1,0,1,3
+Agustus 2026,Rasya Hadi Prawiro Wicaksono,VIII 1,1,1,0,3
+Agustus 2026,Bara'ah Atha Azzahra,VIII 1,1,1,0,12
+Agustus 2026,Khaira Hafiza,VIII 1,1,1,0,18
+Agustus 2026,Rangga Adijaya Putra,VIII 1,1,0,1,19
+Agustus 2026,Kayumi Puteri Mutiara,VIII 2,1,0,1,3
+Agustus 2026,Mohammad Faiq Fadhil,VIII 2,1,1,0,6
+Agustus 2026,Muhammad Rifqy Putra Prasetya,VIII 2,1,0,1,6
+Agustus 2026,Muhammad Putra Hasan Alpaksi,VIII 2,1,0,1,10
+Agustus 2026,Muhammad Syafwan Al-Ghifari,VIII 2,1,1,0,10
+Agustus 2026,Muhammad Elvaro Rizki,VIII 2,1,0,1,10
+Agustus 2026,Adreena Afiya Fitri,VIII 2,1,1,0,12
+Agustus 2026,Natasya Kayla Lathifah,VIII 2,1,1,0,12
+Agustus 2026,Ropiqoh Nurfadillah,VIII 2,1,1,0,12
+Agustus 2026,Muhammad Arkan Oktrakiya,VIII 2,1,1,0,14
+Agustus 2026,Muhammad Hadziq Rihadsyah,VIII 3,1,1,0,6
+Agustus 2026,Raka Ardi Wiguna,VIII 3,1,0,1,7
+Agustus 2026,Kaysan Afiff,VIII 3,1,1,0,14
+Agustus 2026,A'dn Kanzu Habibi,VIII 3,1,1,0,14
+Agustus 2026,Kenzie,VIII 3,1,0,1,14
+Agustus 2026,Fazila Maheswari Shaumi,VIII 3,1,1,0,18
+Agustus 2026,Asyilla Azalea Irawan,VIII 3,1,1,0,18
+Agustus 2026,Ratu Dinar Laila Kamil Adiningrat,VIII 3,1,0,1,26
+Agustus 2026,Livia Azizah Refliannie Al-Sarry,VIII 3,1,0,1,26
+Agustus 2026,Alvita Adelia Sudrajat,VIII 3,1,1,0,26
+Agustus 2026,Afia Najah Kasturi Naim,VIII 3,1,1,0,27
+Agustus 2026,Sitti Talitha Farras Nathania Nugroho,IX 1,1,1,0,20
+Agustus 2026,Fazilla Putri Pribadi,IX 1,1,0,1,27
+Agustus 2026,Arzhita Riani Firmansyah,IX 1,1,1,0,31
+Agustus 2026,Nadia Putri Karani,IX 2,1,1,0,14
+Agustus 2026,Qayreen Mizzani As-Syifa Nasution,IX 2,1,1,0,31
+Agustus 2026,Alena Khayra Malihasyifa,IX 3,1,0,1,27
+Agustus 2026,Ibu Halimatus Sa'diah,Guru,1,1,0,5
+Agustus 2026,Bapak Chaerul Tingkar,Guru,1,1,0,13
+Juli 2026,Bapak Imam Al Asy'ary,Guru,1,1,0,31
+November 2026,Ibu Isrike Wardah,Guru,2,2,0,19;20
+Oktober 2026,Naufal Shidqi Ramadhani,VIII 1,18,15,3,1;2;5;6;7;8;9;10;12;13;14;15;16;19;20;22
+Oktober 2026,Fatih Luthfiali,VIII 2,18,16,2,1;2;5;6;7;8;9;10;12;13;14;15;16;19;20;21;22
+Oktober 2026,Muhammad Rasya Fabian Kaleo,VII 2,16,11,5,1;2;5;6;7;8;9;12;13;14;15;16;19;20;21;22
+Oktober 2026,Muhammad Zahran Nugraha,VIII 2,13,8,5,1;6;7;8;9;10;12;14;15;16;19;20;21
+Oktober 2026,Adam Rompis,VIII 3,13,13,0,1;2;5;6;8;9;12;13;14;15;16;20;21
+Oktober 2026,Erlangga Banyu Pamungkas,VIII 1,12,12,0,1;2;5;6;7;9;12;13;14;15;16;21
+Oktober 2026,Muhammad Hadziq Rihadsyah,VIII 1,12,8,4,2;6;7;9;13;14;15;16;19;20;21
+Oktober 2026,Rangga Adijaya Putra,VIII 1,12,10,2,5;6;8;10;12;13;14;15;16;20;21
+Oktober 2026,A'dn Kanzu Habibi,VIII 3,12,12,0,1;2;6;7;8;9;12;13;15;16;20;21
+Oktober 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,11,5,6,1;2;5;6;7;8;9;12;14;15;20
+Oktober 2026,Devan Muharam Wiriadibrata,IX 1,11,11,0,1;5;6;7;13;14;15;16;20;21;22
+Oktober 2026,Afia Najah Kasturi Naim,VIII 1,10,10,0,6;7;9;13;14;15;16;20;21;22
+Oktober 2026,Al Farraz Caesar Munandar,VIII 3,10,8,2,1;13;14;15;16;19;20;21;22
+Oktober 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,9,8,1,5;6;7;9;12;15;20;21;22
+Oktober 2026,Farhan Ikhlas Nurrahman,VIII 3,9,9,0,1;7;13;15;16;19;20;21
+Oktober 2026,Aletta Qisya Rabbani,VII 1,8,2,6,2;5;6;7;8;9;12;14
+Oktober 2026,Muhammad Zumar,VIII 1,8,2,6,2;5;7;13;15;16;19;21
+Oktober 2026,Aisyah Alfafa Azhari,VIII 2,8,4,4,5;6;9;12;15;20;21;22
+Oktober 2026,Muhammad Naufal Alfarizki,VIII 3,8,6,2,1;8;9;10;13;15;19;20
+Oktober 2026,Aydin Rhesa Maulana,IX 2,8,6,2,1;14;15;16;19;20;21;22
+Oktober 2026,Zalfa Aliyya Hamidah,VII 1,7,5,2,2;5;6;7;8;9;14
+Oktober 2026,Kenzie Alarik Maldini,VIII 3,7,6,1,14;15;16;19;20;21;22
+Oktober 2026,Raisa Gendis Adisty,VII 1,6,1,5,7;9;12;19;20;22
+Oktober 2026,Biagi Putra Lintang,VII 1,6,6,0,14;15;16;19;20;21
+Oktober 2026,Kenzie Abhinaya I.,VII 1,6,6,0,14;16;19;20;21;22
+Oktober 2026,Assyifa Sakinah Andrianov,VIII 2,6,6,0,6;9;12;13;20
+Oktober 2026,Aulia Maharani,IX 3,6,3,3,1;9;15;16;22
+Oktober 2026,Bilqis Ashilla Kurnia,VII 1,5,3,2,2;6;7;8;9
+Oktober 2026,Muhammad Khalil Ramadhan,VII 3,5,5,0,14;16;19;20;21
+Oktober 2026,Raffasya Alby Prabundani,VIII 2,5,5,0,1;12;13;14;16
+Oktober 2026,Aqila Dearly Yudistira,VIII 3,5,4,1,6;12;20;21;22
+Oktober 2026,Faeyza Nabil Akbar,VIII 3,5,1,4,15;16;20;21;22
+Oktober 2026,Tirta Tri Patria,IX 2,5,4,1,5;16;20;21;22
+Oktober 2026,Affan Alidrisi Muhtar,VII 2,4,4,0,6;7;9;14
+Oktober 2026,Hafika Farahdiba Adyamurti,VII 3,4,1,3,14;15;19;22
+Oktober 2026,Arfhio Raqilla Budiwantoro,VIII 1,4,3,1,2;9;16;21
+Oktober 2026,Fatur Nur Rohman,VIII 1,4,1,3,14;16;21;22
+Oktober 2026,Bapak Muhammad Nurhikmah Wiguna,Guru,4,4,0,6;22;23
+Oktober 2026,Azara Syaira Ratifa,VII 3,3,1,2,14;15;19
+Oktober 2026,Alfarezel Giandra Lisiadi,VIII 1,3,1,2,16;21;22
+Oktober 2026,Kayumi Puteri Mutiara,VIII 2,3,0,3,7;10;12
+Oktober 2026,Alena Khayra Malihasyifa,IX 3,3,1,2,1;12;21
+Oktober 2026,Nada Kirana Adinugraha,VII 1,2,0,2,19;20
+Oktober 2026,Athaya Kyna Zhafira,VII 3,2,1,1,19;20
+Oktober 2026,Humayra Nurainayya,VIII 1,2,0,2,7;10
+Oktober 2026,Muliyantika Hasanah,VIII 1,2,0,2,7;10
+Oktober 2026,Alena Farannisa Salsabila,VIII 1,2,1,1,8;12
+Oktober 2026,Fabbyan Athaya payan,VIII 2,2,1,1,1;12
+Oktober 2026,Muhammad Zayyan Majid,VIII 3,2,2,0,9;16
+Oktober 2026,Alvita Adelia Sudrajat,VIII 3,2,2,0,9;21
+Oktober 2026,Muhammad Adrian Naufal Firmansyah,VIII 3,2,0,2,15;16
+Oktober 2026,Catherine Eiliya Fahima,IX 1,2,1,1,10;12
+Oktober 2026,Kayyisah Noo Afifah Arifin,IX 2,2,0,2,1;9
+Oktober 2026,Keiko Naa'imatunnisaai Mashfuufah,VII 1,1,0,1,1
+Oktober 2026,Shafiyah Nur Fildzah,VII 1,1,0,1,15
+Oktober 2026,Maeda Belva Adenaya Noer,VII 2,1,1,0,1
+Oktober 2026,Aladdin Prima Syailendra,VII 3,1,1,0,20
+Oktober 2026,Syafiq Mainaki Ali,VII 3,1,1,0,21
+Oktober 2026,Mumtaz Khoirul Amal,VIII 1,1,1,0,1
+Oktober 2026,Kasyfi Dzaki Husein,VIII 1,1,1,0,1
+Oktober 2026,Lujna Kamila,VIII 1,1,0,1,7
+Oktober 2026,Marchiano Vero Pietersz,VIII 1,1,1,0,20
+Oktober 2026,Danish Athallah Karim,VIII 2,1,1,0,1
+Oktober 2026,Annida Savitri,VIII 2,1,1,0,9
+Oktober 2026,Hana Annisa,VIII 2,1,1,0,9
+Oktober 2026,Faeyza,VIII 2,1,0,1,22
+Oktober 2026,Bunga Qurrotu Ainii Nasution,VIII 3,1,1,0,10
+Oktober 2026,Shafiya Zulaikha Putri,VIII 3,1,1,0,10
+Oktober 2026,Muhammad Uwaish Al Kathiri,VIII 3,1,0,1,21
+Oktober 2026,Tsabiah Tri Patria,IX 1,1,0,1,22
+Oktober 2026,Nizam Alvaro Setiawan,IX 2,1,0,1,22
+Oktober 2026,Uwais Alwan Qarni,IX 2,1,0,1,22
+Oktober 2026,Zaim Syauqi Alhusen,IX 3,1,0,1,1
+Oktober 2026,Ibu Gita Safta Marlina,Guru,1,1,0,14
+September 2026,Adam Rompis,VIII 3,9,8,1,21;22;23;24;25;28;29;30
+September 2026,Afia Najah Kasturi Naim,VIII 1,8,8,0,1;3;4;9;22;23;24;25
+September 2026,Devan Muharam Wiriadibrata,IX 1,8,8,0,1;3;4;9;21;22;23;24
+September 2026,Affan Alidrisi Muhtar,VII 2,7,7,0,1;3;4;9;21;24;25
+September 2026,Erlangga Banyu Pamungkas,VIII 1,6,6,0,23;24;28;29;30
+September 2026,Assyifa Sakinah Andrianov,VIII 2,6,6,0,3;21;22;23;24;30
+September 2026,Farhan Ikhlas Nurrahman,VIII 3,6,6,0,3;4;9;21;22;23
+September 2026,Aydin Rhesa Maulana,IX 2,6,6,0,1;4;9;10;22;23
+September 2026,Naufal Shidqi Ramadhani,VIII 1,5,3,2,1;17;24;29;30
+September 2026,Fatih Luthfiali,VIII 2,5,1,4,2;17;24;29;30
+September 2026,Alena Khayra Malihasyifa,IX 3,5,2,3,3;22;23;24;30
+September 2026,Muhammad Rasya Fabian Kaleo,VII 2,4,0,4,2;17;28;30
+September 2026,Muhammad Zumar,VIII 1,4,1,3,2;17;23;24
+September 2026,Muhammad Yusuf Idham Alam Ratu,VIII 2,4,4,0,3;28;29;30
+September 2026,Muhammad Zahran Nugraha,VIII 2,4,4,0,23;24;25;30
+September 2026,A'dn Kanzu Habibi,VIII 3,4,4,0,4;28;29;30
+September 2026,Alvita Adelia Sudrajat,VIII 3,4,3,1,21;22;23;24
+September 2026,Muhammad Naufal Alfarizki,VIII 3,4,4,0,23;24;25;30
+September 2026,Tirta Tri Patria,IX 2,4,3,1,1;4;9;23
+September 2026,Kanza Naveen Putri Zulfikar,VII 2,3,3,0,3;4;9
+September 2026,Fakhirah Bassam Septariana,VII 3,3,3,0,3;4;9
+September 2026,Arfhio Raqilla Budiwantoro,VIII 1,3,1,2,2;17;24
+September 2026,Fabbyan Athaya payan,VIII 2,3,3,0,28;29;30
+September 2026,Shofiyyah Miratul Izzah,VIII 3,3,3,0,1;3;4
+September 2026,Catherine Eiliya Fahima,IX 1,3,3,0,4;23;24
+September 2026,Aulia Maharani,IX 3,3,3,0,3;22;23
+September 2026,Aulia Sovie Putri,VII 2,2,2,0,4;9
+September 2026,Raden Keya Chayra Rafani,VII 3,2,0,2,3;9
+September 2026,Malikah Azzahra Siregar,VII 3,2,1,1,3;4
+September 2026,Muhammad Hadziq Rihadsyah,VIII 1,2,1,1,2;29
+September 2026,Bara'ah Atha Azzahra,VIII 1,2,0,2,3;25
+September 2026,Raffasya Alby Prabundani,VIII 2,2,2,0,4;24
+September 2026,Bunga Qurrotu Ainii Nasution,VIII 3,2,2,0,1;3
+September 2026,Mahyra Putri Ivanka,IX 1,2,2,0,1;3
+September 2026,Aletta Qisya Rabbani,VII 1,1,1,0,3
+September 2026,Zalfa Aliyya Hamidah,VII 1,1,1,0,3
+September 2026,Keiko Naa'imatunnisaai Mashfuufah,VII 1,1,1,0,3
+September 2026,Maeda Belva Adenaya Noer,VII 2,1,1,0,3
+September 2026,Naaila Izzatunnisa,VII 2,1,0,1,9
+September 2026,Shafira Titania Azizah,VII 3,1,1,0,3
+September 2026,Vania Cinta Kirana,VII 3,1,1,0,3
+September 2026,Salsabila Fatisha Zahira,VII 3,1,0,1,3
+September 2026,Syafira Tifania Azizah,VII 3,1,0,1,4
+September 2026,Kanaya Citra Hiranya,VII 3,1,0,1,4
+September 2026,Arrisya Saniyya Alhaq Alminudin,VIII 1,1,1,0,1
+September 2026,Humayra Nurainayya,VIII 1,1,0,1,1
+September 2026,Rasya Hadi Prawiro Wicaksono,VIII 1,1,1,0,4
+September 2026,Rangga Adijaya Putra,VIII 1,1,0,1,23
+September 2026,Adreena Afiya Fitri,VIII 2,1,1,0,3
+September 2026,Shahila Ramadani Rahman,VIII 2,1,1,0,3
+September 2026,Danish Athallah Karim,VIII 2,1,0,1,30
+September 2026,Faeyza Nabil Akbar,VIII 3,1,1,0,1
+September 2026,Kenzie Alarik Maldini,VIII 3,1,0,1,1
+September 2026,Tsabiah Tri Patria,IX 1,1,1,0,24
+September 2026,Najwa Alma Suhada,IX 2,1,1,0,1
+September 2026,Qayreen Mizzani As-Syifa Nasution,IX 2,1,1,0,1
+September 2026,Nizam Alvaro Setiawan,IX 2,1,1,0,24
+September 2026,Uwais Alwan Qarni,IX 2,1,0,1,24
+September 2026,Hammam Haidar Hasan,IX 3,1,0,1,4
+September 2026,Zaim Syauqi Alhusen,IX 3,1,0,1,4
+September 2026,Muhamad Zaky Pratama,IX 3,1,1,0,24
+September 2026,Bapak Chaerul Tingkar,Guru,1,1,0,5
 `;
  
 try{
@@ -892,13 +937,12 @@ function startQuiz(){
  render();
 }
  
- 
 /* ---------- pemicu dari kartu game ---------- */
 $$('.game-card').forEach(function(btn){
  btn.addEventListener('click',function(){
   var g=btn.dataset.game;
   openPanel('<h3>Memuat…</h3>');
-  if(g==='mood')startMood();else if(g==='memo')startMemo();else if(g==='quiz')startQuiz();else if(g==='kenal')startKenal();
+  if(g==='mood')startMood();else if(g==='memo')startMemo();else if(g==='quiz')startQuiz();
  });
 });
 })();
@@ -906,6 +950,11 @@ $$('.game-card').forEach(function(btn){
 </body>
 </html>
  
+
+
+
+
+
 
 
 
